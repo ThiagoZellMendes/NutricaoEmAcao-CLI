@@ -1,0 +1,30 @@
+{
+  "expo": {
+    "name": "Nutrição em Ação",
+    "slug": "nutricao-em-acao",
+    "scheme": "nutricaoemacao",
+    "version": "2.0.0",
+    "splash": {
+      "image": "./src/assets/splashNutri.png",
+      "resizeMode": "contain",
+      "background": "./src/assets/bg.png"
+    },
+    "icon": "./src/assets/iconNutri.png",
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "17fa09c9-b8a8-430f-b3e7-d00389bb951e"
+      }
+    },
+    "android": {
+      "package": "com.nutricaemacao"
+    },
+    "ios": {
+      "bundleIdentifier": "com.nutricaoemacao"
+    }
+  },
+  "name": "NutricaoEmAcao",
+  "displayName": "Nutrição em Ação"
+}
