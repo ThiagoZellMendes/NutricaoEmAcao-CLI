@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">Nutricão Em Acão</string>
+    <string moduleConfig="true" name="CodePushDeploymentKey">b0f0b688-5c8e-4716-8099-22e4d16274e7</string>
+    <string name="appCenterCrashes_whenToSendCrashes" moduleConfig="true" translatable="false">DO_NOT_ASK_JAVASCRIPT</string>
+    <string name="appCenterAnalytics_whenToEnableAnalytics" moduleConfig="true" translatable="false">ALWAYS_SEND</string>
+</resources>

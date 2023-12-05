@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "690410890969",
+    "project_id": "nutricaoemacao-e7b0e",
+    "storage_bucket": "nutricaoemacao-e7b0e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:690410890969:android:c52ed4079ce8ab184100c8",
+        "android_client_info": {
+          "package_name": "com.nutricaoemacao"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyANiSLUqO12hsX1FVxpzt8UhJ4x1DplL4M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
