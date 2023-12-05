@@ -86,7 +86,7 @@ export function RegisterPatients() {
             genre,
           });
         setModalType({
-          title: "Paciente Cadastrado com sucesso",
+          title: "Paciente cadastrado com sucesso",
           type: "success",
         });
         setTimeout(() => setLoading(false), 1000);

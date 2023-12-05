@@ -51,7 +51,7 @@ export function RegisterNutritionists() {
       value => !!value && validateNationalRegistry(value),
     ),
     email: Yup.string()
-      .email("email obrigartorio")
+      .email("email obrigatário")
       .required("digite seu email")
       .trim(),
     password: Yup.string().required("digite sua senha").trim().min(6, 'A senha precisa ter no mínimo 6 caracteres'),
@@ -85,7 +85,7 @@ export function RegisterNutritionists() {
         .get();
 
       if (!emailSnapshot.empty) {
-        setModalType({ title: "O Email já possui Cadastro", type: "error" });
+        setModalType({ title: "O Email já possui cadastro", type: "error" });
         setTimeout(() => setLoading(false), 1000);
         setTimeout(() => setIsModalVisible(true), 2000);
       } else {
@@ -104,7 +104,7 @@ export function RegisterNutritionists() {
               password,
             });
           setModalType({
-            title: "Nutricionista Cadastrado com sucesso",
+            title: "Nutricionista cadastrado com sucesso",
             type: "success",
           });
           setTimeout(() => setLoading(false), 1000);
@@ -113,7 +113,7 @@ export function RegisterNutritionists() {
       }
     } catch (error) {
       console.log(error)
-      setModalType({ title: "O Email já possui Cadastro", type: "error" });
+      setModalType({ title: "O Email já possui cadastro", type: "error" });
       setTimeout(() => setLoading(false), 1000);
       setTimeout(() => setIsModalVisible(true), 2000);
     }
@@ -140,7 +140,7 @@ export function RegisterNutritionists() {
             <InputForm
               type="custom"
               options={{
-                mask: "*********************************",
+                mask: "*******************************************************",
               }}
               name="firstName"
               control={control}
@@ -152,7 +152,7 @@ export function RegisterNutritionists() {
             <InputForm
               type="custom"
               options={{
-                mask: "*********************************",
+                mask: "*******************************************************",
               }}
               name="lastName"
               control={control}
@@ -175,7 +175,7 @@ export function RegisterNutritionists() {
             <InputForm
               type="custom"
               options={{
-                mask: "**************************************",
+                mask: "*******************************************************",
               }}
               autoCapitalize="none"
               name="email"
@@ -189,7 +189,7 @@ export function RegisterNutritionists() {
               name="password"
               type="custom"
               options={{
-                mask: "*********************************",
+                mask: "*******************************************************",
               }}
               control={control}
               TypePassword
@@ -203,7 +203,7 @@ export function RegisterNutritionists() {
               name="passwordConfirmation"
               type="custom"
               options={{
-                mask: "*********************************",
+                mask: "*******************************************************",
               }}
               TypePassword
               control={control}

@@ -36,8 +36,8 @@ export function SignIn() {
   const [loading, setLoading] = useState(false);
   const [modalType, setModalType] = useState("");
   const schema = Yup.object().shape({
-    email: Yup.string().required("digite seu Email").trim(),
-    password: Yup.string().required("Campo obrigatorio"),
+    email: Yup.string().required("digite seu email").trim(),
+    password: Yup.string().required("Campo obrigatório"),
   });
 
   const closeModal = () => {
@@ -79,7 +79,7 @@ export function SignIn() {
               name="email"
               type="custom"
               options={{
-                mask: "******************************",
+                mask: "*******************************************************",
               }}
               control={control as any}
               autoCapitalize={"none"}
@@ -92,7 +92,7 @@ export function SignIn() {
             <InputForm
               type="custom"
               options={{
-                mask: "************************************",
+                mask: "*******************************************************",
               }}
               name="password"
               TypePassword

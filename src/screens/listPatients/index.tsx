@@ -59,7 +59,7 @@ export function ListPatients() {
           <Content>
             <TouchableOpacity
               style={{
-                marginTop: 20,
+                // marginTop: 20,
                 alignSelf: "flex-end",
                 marginRight: 20,
                 flexDirection: "row",
@@ -84,6 +84,11 @@ export function ListPatients() {
             </ContainerLogo>
             <ContainerTitle>
               <Title>Lista de Pacientes:</Title>
+              <ContainerAddPatients
+              onPress={() => navigation.navigate("RegisterPatients")}
+            >
+              <IconAdd name={"plus"} />
+            </ContainerAddPatients>
             </ContainerTitle>
             <ContainerList>
               {!pacientsData || pacientsData.length === 0 ? (
@@ -112,13 +117,6 @@ export function ListPatients() {
               )}
             </ContainerList>
           </Content>
-          <ContainePlus>
-            <ContainerAddPatients
-              onPress={() => navigation.navigate("RegisterPatients")}
-            >
-              <IconAdd name={"plus"} />
-            </ContainerAddPatients>
-          </ContainePlus>
         </ControllerView>
       </BackgroundContent>
     </Container>

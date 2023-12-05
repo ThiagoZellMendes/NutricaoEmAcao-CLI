@@ -22,7 +22,7 @@ export function InputForm({
   TypePassword,
   ...rest
 }: Props) {
-  const [showPassword, setShowPassword] = useState(false);
+  const [showPassword, setShowPassword] = useState(true);
   return (
     <Container>
       <Content>
@@ -34,7 +34,7 @@ export function InputForm({
               onChangeText={onChange}
               value={value}
               placeholderTextColor={"#9AA4AC"}
-              secureTextEntry={showPassword}
+              secureTextEntry={TypePassword ? showPassword : false}
               {...rest}
             />
           )}

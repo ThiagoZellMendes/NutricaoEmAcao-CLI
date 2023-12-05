@@ -33,7 +33,7 @@ export function CalculateList() {
         <ButtonContainer>
           <ButtonComponent
             type="default"
-            title={"Indice de Massa \n Corporal"}
+            title={"Índice de Massa \n Corporal"}
             nameIcon="chevron-right"
             onPress={() => navigation.navigate("CalculationImc", { patient: patient })}
           />

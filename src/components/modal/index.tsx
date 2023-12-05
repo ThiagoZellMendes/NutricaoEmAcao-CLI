@@ -21,7 +21,7 @@ export function ConfirmationModal({
       {type === "success" ? (
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
-            <Feather name="check-circle" size={50} color="green" />
+            <Feather name="check-circle" size={30} color="green" />
             <Text style={styles.successText}>{title}</Text>
             <TouchableOpacity style={styles.okButton} onPress={closeModal}>
               <Text style={styles.okButtonText}>OK</Text>
@@ -31,7 +31,7 @@ export function ConfirmationModal({
       ) : (
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
-            <Feather name="alert-circle" size={50} color="red" />
+            <Feather name="alert-circle" size={30} color="red" />
             <Text style={styles.successText}>{title}</Text>
             <TouchableOpacity style={styles.errorButton} onPress={closeModal}>
               <Text style={styles.okButtonText}>OK</Text>

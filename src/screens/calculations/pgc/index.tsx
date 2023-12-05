@@ -71,7 +71,7 @@ export function CalculationPgc() {
       .min(1)
       .max(3)
       .required()
-      .matches(/^[0-9]+$/, "Must be only digits"),
+      .matches(/^[0-9]+$/, "Só pode serem usando numeros"),
     triceps: Yup.string().required("Digite triceps").min(1),
     biceps: Yup.string().required("Digite biceps").min(1),
     subescapular: Yup.string().required("Digite subescapular").min(1),
@@ -135,7 +135,7 @@ export function CalculationPgc() {
 
       Toast.success("Cálculos concluídos!");
     } catch (err) {
-      Toast.error("Erro ao Calcular PGC!", "top");
+      Toast.error("Erro ao calcular PGC!", "top");
       console.log(err);
     }
   };
@@ -159,7 +159,7 @@ export function CalculationPgc() {
       setTimeout(() => setIsModalVisible(true), 2000);
     } catch (error) {
       setLoading(false);
-      setModalType({ title: "Erro ao salvar Pacient", type: "error" });
+      setModalType({ title: "Erro ao salvar paciente", type: "error" });
       setTimeout(() => setLoading(false), 1000);
       setTimeout(() => setIsModalVisible(true), 2000);
       console.error("Erro:", error);
@@ -213,7 +213,7 @@ export function CalculationPgc() {
                       justifyContent: "center",
                     }}
                   >
-                    {`Paciente não possui Cálculos`}
+                    {`Paciente não possui cálculos`}
                   </Text>
                 )
               }
@@ -333,7 +333,7 @@ export function CalculationPgc() {
           </ButtonContainer>
           <ButtonContainerSave>
             <ButtonComponent
-              title={"Salvar Cálculos do paciente"}
+              title={"Salvar cálculos do paciente"}
               type="save"
               onPress={handleSavePatient}
             />

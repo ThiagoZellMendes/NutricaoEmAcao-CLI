@@ -14,6 +14,7 @@ export const Content = styled.ScrollView`
   align-self: center;
   padding: 0 ${RFValue(16)}px;
   margin-bottom: ${() => (Platform.OS === "android" ? "20px" : "30px")};
+  margin-top: ${RFValue(15)}px;
 `
 export const ContainerPatient = styled.View`
   align-items: flex-start;

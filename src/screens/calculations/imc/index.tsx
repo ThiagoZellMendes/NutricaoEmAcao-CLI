@@ -74,7 +74,7 @@ export function CalculationImc() {
       .min(1)
       .max(3)
       .required()
-      .matches(/^[0-9]+$/, "Must be only digits"),
+      .matches(/^[0-9]+$/, "So pode ser usando numeros"),
     weight: Yup.string().required("Digite o peso").min(1),
     height: Yup.string().required("Digite a altura").min(1),
   });
@@ -130,7 +130,7 @@ export function CalculationImc() {
       console.log(result)
       Toast.success('Cálculos concluídos!')
     } catch (err) {
-      Toast.error('Erro ao Calcular IMC!', 'top')
+      Toast.error('Erro ao calcular IMC!', 'top')
       console.log(err);
     }
   };
@@ -151,7 +151,7 @@ export function CalculationImc() {
         setTimeout(() => setLoading(false), 1000);
         setTimeout(() => setIsModalVisible(true), 2000);
     } catch (error) {
-      setModalType({ title: "Erro ao salvar Pacient", type: "error" });
+      setModalType({ title: "Erro ao salvar paciente", type: "error" });
         setTimeout(() => setLoading(false), 1000);
         setTimeout(() => setIsModalVisible(true), 2000);
       console.error("Erro:", error);
@@ -203,7 +203,7 @@ export function CalculationImc() {
                       justifyContent: "center",
                     }}
                   >
-                    {`Paciente não possui Cálculos`}
+                    {`Paciente não possui cálculos`}
                   </Text>
                 )
               }
@@ -288,7 +288,7 @@ export function CalculationImc() {
           </ButtonContainer>
           <ButtonContainerSave>
             <ButtonComponent
-              title={"Salvar Cálculos do paciente"}
+              title={"Salvar cálculos do paciente"}
               type="save"
               onPress={handleSavePatient}
             />
