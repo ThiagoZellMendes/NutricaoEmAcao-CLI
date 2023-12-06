@@ -29,6 +29,7 @@ import {
 } from "react-native";
 import { ConfirmationModal } from "../../../components/modal";
 import { validateNationalRegistry } from "../../../utils/ValidateCPF-CNPJ";
+import auth from "@react-native-firebase/auth";
 
 const data = [
   { label: "Masculino", value: "M" },
@@ -40,6 +41,7 @@ type modalProps = {
   title: string;
 };
 
+
 export function RegisterPatients() {
   const [genre, setGenre] = useState("");
   const { navigate } = useNavigation<any>();
@@ -49,6 +51,7 @@ export function RegisterPatients() {
     title: "",
   } as modalProps);
   const [isModalVisible, setIsModalVisible] = useState(false);
+  
 
   const schema = Yup.object().shape({
     cpf: Yup.string()
@@ -66,6 +69,7 @@ export function RegisterPatients() {
   async function handleCreatePatient({ fullName, cpf, age }: PatientProps) {
     setLoading(true);
     try {
+      const nutricionistUid = auth().currentUser?.uid.trim()
       const cpfSnapshot = await firestore()
         .collection("patients")
         .where("cpf", "==", cpf)
@@ -80,6 +84,7 @@ export function RegisterPatients() {
           .collection("patients")
           .add({
             id: String(uuid.v4()),
+            nutricionistUid,
             fullName,
             cpf,
             age,

@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import Logo2 from "../../assets/Logo2.svg";
 import { ButtonComponent } from "../../components/ButtonComponent";
 import auth from "@react-native-firebase/auth";
-import firestore from "@react-native-firebase/firestore";
+import firestore, { Filter } from "@react-native-firebase/firestore";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import {
   BackgroundContent,
@@ -29,10 +29,13 @@ export function ListPatients() {
   const [pacientsData, setPacientsData] = useState([]);
   const navigation = useNavigation<any>();
 
+
   function getPatients() {
     try {
+      const nutricionistUid = auth().currentUser?.uid.trim()
       firestore()
-        .collection("patients")
+      .collection("patients")
+      .where(Filter('nutricionistUid', '==', nutricionistUid )) //.where(Filter('age', '==', '38' ))
         .onSnapshot((onSnapshot) => {
           const patientsForData = [] as any;
           onSnapshot.forEach((documentSnapshot) => {
@@ -59,7 +62,6 @@ export function ListPatients() {
           <Content>
             <TouchableOpacity
               style={{
-                // marginTop: 20,
                 alignSelf: "flex-end",
                 marginRight: 20,
                 flexDirection: "row",
