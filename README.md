@@ -1,4 +1,4 @@
-# Nutricão Em Ação
+# Nutrição Em Ação
 O Nutricão Em Ação é uma ferramenta desenvolvida para nutricionistas, oferecendo suporte na avaliação do estado nutricional de pacientes por meio do cálculo preciso do Índice de Massa Corporal (IMC), percentual de gordura corporal (PGC) e outras medidas antropométricas essenciais.
 
 Recursos Principais:
