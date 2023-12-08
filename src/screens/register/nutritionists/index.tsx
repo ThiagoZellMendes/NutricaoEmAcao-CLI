@@ -10,7 +10,7 @@ import uuid from 'react-native-uuid';
 import Logo2 from '../../../assets/Logo2.svg';
 import {
   ButtonComponent,
-  ConfirmationModal,
+  FeedbackModal,
   InputForm,
   LoadingModal,
 } from '../../../components';
@@ -163,7 +163,7 @@ export function RegisterNutritionists() {
         </Content>
       </BackgroundContent>
       {loading && <LoadingModal loading={loading} />}
-      <ConfirmationModal
+      <FeedbackModal
         isVisible={isModalVisible}
         closeModal={closeModal}
         title={modalType.title}

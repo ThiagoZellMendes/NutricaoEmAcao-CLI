@@ -8,7 +8,7 @@ import uuid from 'react-native-uuid';
 import * as Yup from 'yup';
 import {
   ButtonComponent,
-  ConfirmationModal,
+  FeedbackModal,
   GenreButton,
   InputCalculations,
   LoadingModal,
@@ -288,7 +288,7 @@ export function CalculationImc() {
         </Content>
       </BackgroundContent>
       {loading && <LoadingModal loading={loading} />}
-      <ConfirmationModal
+      <FeedbackModal
         type={modalType.type}
         isVisible={isModalVisible}
         closeModal={closeModal}

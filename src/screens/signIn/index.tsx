@@ -8,7 +8,7 @@ import auth from '@react-native-firebase/auth';
 import Logo2 from '../../assets/Logo2.svg';
 import {
   ButtonComponent,
-  ConfirmationModal,
+  FeedbackModal,
   InputForm,
   LoadingModal,
 } from '../../components';
@@ -122,7 +122,7 @@ export function SignIn() {
         </Content>
       </BackgroundContent>
       {loading && <LoadingModal loading={loading} />}
-      <ConfirmationModal
+      <FeedbackModal
         type={modalType}
         isVisible={isModalVisible}
         closeModal={closeModal}

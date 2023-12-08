@@ -10,7 +10,7 @@ import ToastManager, {Toast} from 'toastify-react-native';
 import * as Yup from 'yup';
 import {
   ButtonComponent,
-  ConfirmationModal,
+  FeedbackModal,
   GenreButton,
   InputCalculations,
   LoadingModal,
@@ -336,7 +336,7 @@ export function CalculationPgc() {
         </Content>
       </BackgroundContent>
       {loading && <LoadingModal loading={loading} />}
-      <ConfirmationModal
+      <FeedbackModal
         type={modalType.type}
         isVisible={isModalVisible}
         closeModal={closeModal}

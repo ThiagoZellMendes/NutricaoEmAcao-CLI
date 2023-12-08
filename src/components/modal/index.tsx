@@ -1,88 +1,49 @@
-import React, { useState } from "react";
-import { Modal, Text, View, StyleSheet, TouchableOpacity } from "react-native";
-import Feather from "react-native-vector-icons/Feather";
-import { ModalProps } from "./props";
+import React from 'react';
+import Feather from 'react-native-vector-icons/Feather';
+import {ModalProps} from './props';
+import {
+  ErrorButton,
+  ModalContainer,
+  ModalContent,
+  OkButton,
+  OkButtonText,
+  StyledModal,
+  SuccessText,
+} from './styles';
 
-export function ConfirmationModal({
+export function FeedbackModal({
   isVisible,
   closeModal,
   title,
   type,
 }: ModalProps) {
   return (
-    <Modal
+    <StyledModal
       animationType="fade"
       transparent={true}
       visible={isVisible}
       onRequestClose={() => {
         closeModal();
-      }}
-    >
-      {type === "success" ? (
-        <View style={styles.modalContainer}>
-          <View style={styles.modalContent}>
-            <Feather name="check-circle" size={30} color="green" />
-            <Text style={styles.successText}>{title}</Text>
-            <TouchableOpacity style={styles.okButton} onPress={closeModal}>
-              <Text style={styles.okButtonText}>OK</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      ) : (
-        <View style={styles.modalContainer}>
-          <View style={styles.modalContent}>
-            <Feather name="alert-circle" size={30} color="red" />
-            <Text style={styles.successText}>{title}</Text>
-            <TouchableOpacity style={styles.errorButton} onPress={closeModal}>
-              <Text style={styles.okButtonText}>OK</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      )}
-    </Modal>
+      }}>
+      <ModalContainer>
+        <ModalContent>
+          <Feather
+            name={type === 'success' ? 'check-circle' : 'alert-circle'}
+            size={30}
+            color={type === 'success' ? 'green' : 'red'}
+          />
+          <SuccessText>{title}</SuccessText>
+          {type === 'success' ? (
+            <OkButton onPress={closeModal}>
+              <OkButtonText>OK</OkButtonText>
+            </OkButton>
+          ) : (
+            <ErrorButton onPress={closeModal}>
+              <OkButtonText>OK</OkButtonText>
+            </ErrorButton>
+          )}
+        </ModalContent>
+      </ModalContainer>
+    </StyledModal>
   );
 }
-
-const styles = StyleSheet.create({
-  modalContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "rgba(0, 0, 0, 0.5)", // Fundo escurecido
-  },
-  modalContent: {
-    width: 300,
-    height: 180,
-    backgroundColor: "white",
-    borderRadius: 10,
-    alignItems: "center",
-    justifyContent: "center",
-    padding: 20,
-  },
-  successText: {
-    fontSize: 18,
-    fontWeight: "bold",
-    marginTop: 10,
-    textAlign: "center",
-    color: "black",
-  },
-  okButton: {
-    backgroundColor: "green",
-    marginTop: 20,
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 5,
-  },
-  errorButton: {
-    backgroundColor: "red",
-    marginTop: 20,
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 5,
-  },
-  okButtonText: {
-    color: "white",
-    fontSize: 16,
-    fontWeight: "bold",
-  },
-});

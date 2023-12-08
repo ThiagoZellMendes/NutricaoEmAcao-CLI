@@ -23,7 +23,7 @@ import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import ToastManager, {Toast} from 'toastify-react-native';
 import {
   ButtonComponent,
-  ConfirmationModal,
+  FeedbackModal,
   DropdownComponent,
   InputForm,
   LoadingModal,
@@ -178,7 +178,7 @@ export function RegisterPatients() {
         </Content>
       </BackgroundContent>
       {loading && <LoadingModal loading={loading} />}
-      <ConfirmationModal
+      <FeedbackModal
         isVisible={isModalVisible}
         closeModal={closeModal}
         title={modalType.title}
