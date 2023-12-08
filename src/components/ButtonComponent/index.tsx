@@ -15,7 +15,7 @@ export function ButtonComponent({
     <Container  type={type}>
       <Button onPress={onPress} {...rest}>
         <Text>{title}</Text>
-        <Icon name={nameIcon} />
+        {nameIcon ?  <Icon name={nameIcon} /> : undefined }
       </Button>
     </Container>
   )

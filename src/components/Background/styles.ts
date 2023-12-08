@@ -5,7 +5,7 @@ export const isHasNotch = () => {
   if (Platform.OS === "android") {
     return (StatusBar.currentHeight && StatusBar.currentHeight + 10) || 10
   }
-  return 10
+  return 0
 }
 
 export const Container = styled.View`

@@ -1,15 +1,13 @@
-import React, { useState } from "react";
+import React, {useRef, useState} from 'react';
 
-import { yupResolver } from "@hookform/resolvers/yup";
-import { useNavigation } from "@react-navigation/native";
-import { useForm } from "react-hook-form";
-import * as Yup from "yup";
-import Logo2 from "../../../assets/Logo2.svg";
-import uuid from "react-native-uuid";
-import { ButtonComponent } from "../../../components/ButtonComponent";
-import { DropdownComponent } from "../../../components/DropDonwList";
-import { InputForm } from "../../../components/InputForm";
-import firestore from "@react-native-firebase/firestore";
+import {yupResolver} from '@hookform/resolvers/yup';
+import firestore from '@react-native-firebase/firestore';
+import {useNavigation} from '@react-navigation/native';
+import {useForm} from 'react-hook-form';
+import {Alert, Dimensions, findNodeHandle} from 'react-native';
+import uuid from 'react-native-uuid';
+import Logo2 from '../../../assets/Logo2.svg';
+import {InputProps, PatientProps, valueName} from './props';
 import {
   BackgroundContent,
   ButtonContainer,
@@ -18,22 +16,23 @@ import {
   ContainerLogo,
   Content,
   ContentRegister,
-} from "./styles";
-import { PatientProps } from "./props";
+} from './styles';
+
+import auth from '@react-native-firebase/auth';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import ToastManager, {Toast} from 'toastify-react-native';
 import {
-  ActivityIndicator,
-  Alert,
-  Modal,
-  StyleSheet,
-  View,
-} from "react-native";
-import { ConfirmationModal } from "../../../components/modal";
-import { validateNationalRegistry } from "../../../utils/ValidateCPF-CNPJ";
-import auth from "@react-native-firebase/auth";
+  ButtonComponent,
+  ConfirmationModal,
+  DropdownComponent,
+  InputForm,
+  LoadingModal,
+} from '../../../components';
+import {INPUTS as INPUTCOLLECIONS, textInputShapeYup} from './data';
 
 const data = [
-  { label: "Masculino", value: "M" },
-  { label: "Feminino", value: "F" },
+  {label: 'Masculino', value: 'M'},
+  {label: 'Feminino', value: 'F'},
 ] as any;
 
 type modalProps = {
@@ -41,47 +40,42 @@ type modalProps = {
   title: string;
 };
 
-
 export function RegisterPatients() {
-  const [genre, setGenre] = useState("");
-  const { navigate } = useNavigation<any>();
+  const [genre, setGenre] = useState('');
+  const scrollViewRef = useRef<KeyboardAwareScrollView>(null);
+  const [, setCurrentInputFocus] = useState(0);
+  const {navigate} = useNavigation<any>();
   const [loading, setLoading] = useState(false);
   const [modalType, setModalType] = useState<modalProps>({
-    type: "",
-    title: "",
+    type: '',
+    title: '',
   } as modalProps);
   const [isModalVisible, setIsModalVisible] = useState(false);
-  
 
-  const schema = Yup.object().shape({
-    cpf: Yup.string()
-      .required("digite seu CPF")
-      .trim()
-      .test(
-        "cpf",
-        "cpf Invalido",
-        (value) => !!value && validateNationalRegistry(value)
-      ),
-    fullName: Yup.string().required("digite o nome do paciente"),
-    age: Yup.string().required("digite seu sobrenome"),
-  });
+  const INPUTS: InputProps[] = INPUTCOLLECIONS().map(item =>
+    Object.assign(item, {
+      ref: useRef(null),
+    }),
+  );
 
-  async function handleCreatePatient({ fullName, cpf, age }: PatientProps) {
+  async function handleCreatePatient({fullName, cpf, age}: PatientProps) {
+    if (!genre) return Toast.error('Selecione um gênero!', 'center');
     setLoading(true);
+
     try {
-      const nutricionistUid = auth().currentUser?.uid.trim()
+      const nutricionistUid = auth().currentUser?.uid.trim();
       const cpfSnapshot = await firestore()
-        .collection("patients")
-        .where("cpf", "==", cpf)
+        .collection('patients')
+        .where('cpf', '==', cpf)
         .get();
 
       if (!cpfSnapshot.empty) {
-        setModalType({ title: "O Cpf já possui Cadastro", type: "error" });
+        setModalType({title: 'O Cpf já possui Cadastro', type: 'error'});
         setTimeout(() => setLoading(false), 1000);
         setTimeout(() => setIsModalVisible(true), 2000);
       } else {
         await firestore()
-          .collection("patients")
+          .collection('patients')
           .add({
             id: String(uuid.v4()),
             nutricionistUid,
@@ -91,40 +85,41 @@ export function RegisterPatients() {
             genre,
           });
         setModalType({
-          title: "Paciente cadastrado com sucesso",
-          type: "success",
+          title: 'Paciente cadastrado com sucesso',
+          type: 'success',
         });
         setTimeout(() => setLoading(false), 1000);
         setTimeout(() => setIsModalVisible(true), 2000);
       }
     } catch (error) {
       setLoading(false);
-      Alert.alert("Ocorreu um erro ao processar o cadastro");
-      console.error("Erro:", error);
+      Alert.alert('Ocorreu um erro ao processar o cadastro');
+      console.error('Erro:', error);
     }
   }
 
   const {
     control,
     handleSubmit,
-    formState: { errors },
+    formState: {errors},
   } = useForm({
-    resolver: yupResolver(schema),
+    resolver: yupResolver(textInputShapeYup()),
   });
 
   const closeModal = () => {
-    if (modalType.type == "error") {
+    if (modalType.type == 'error') {
       setIsModalVisible(false);
       return;
     } else {
       setIsModalVisible(false);
-      navigate("ListPatients");
+      navigate('ListPatients');
     }
   };
 
-  console.log("🔥", genre);
+  console.log('🔥', genre);
   return (
     <Container>
+      <ToastManager />
       <BackgroundContent>
         <Content showsVerticalScrollIndicator={false}>
           <ContainerLogo>
@@ -132,41 +127,36 @@ export function RegisterPatients() {
           </ContainerLogo>
           <ContentRegister>
             <ContainerForm>
-              <InputForm
-                type="cpf"
-                name="cpf"
-                control={control}
-                autoCapitalize="none"
-                placeholder={" Digite seu cpf"}
-                keyboardType="number-pad"
-                errorInput={(errors.cpf && errors.cpf.message) || ""}
-              />
-            </ContainerForm>
-            <ContainerForm>
-              <InputForm
-                name="fullName"
-                type="custom"
-                options={{
-                  mask: "*******************************************",
-                }}
-                control={control}
-                placeholder={" Digite o nome completo do paciente"}
-                errorInput={(errors.fullName && errors.fullName.message) || ""}
-              />
-            </ContainerForm>
-            <ContainerForm>
-              <InputForm
-                name="age"
-                type="custom"
-                options={{
-                  mask: "999",
-                }}
-                control={control}
-                autoCapitalize="none"
-                placeholder={" Digite o a idade do paciente"}
-                keyboardType="number-pad"
-                errorInput={(errors.age && errors.age.message) || ""}
-              />
+              {INPUTS.map((item, index) => {
+                const itemName = item.name as valueName;
+                return (
+                  <InputForm
+                    key={item.id}
+                    title={item.title}
+                    name={item.name}
+                    type={item.type}
+                    options={item.options}
+                    control={control}
+                    autoCapitalize={item.autoCapitalize}
+                    autoCorrect={item.autoCorrect}
+                    placeholder={item.placeholder}
+                    typePassword={item.typePassword}
+                    returnKeyType={
+                      INPUTS.length === index + 1 ? 'send' : 'next'
+                    }
+                    onFocus={(event: any) => {
+                      scrollViewRef.current?.scrollToFocusedInput(
+                        findNodeHandle(event.target) || 0,
+                        (Dimensions.get('window').height / INPUTS.length) *
+                          1.15,
+                        0,
+                      );
+                      setCurrentInputFocus(index);
+                    }}
+                    errorInput={errors[itemName]?.message}
+                  />
+                );
+              })}
             </ContainerForm>
             <ContainerForm>
               <DropdownComponent
@@ -180,24 +170,14 @@ export function RegisterPatients() {
           <ButtonContainer>
             <ButtonComponent
               type="default"
-              title={"Cadastrar"}
+              title={'Cadastrar'}
               nameIcon="chevron-right"
               onPress={handleSubmit(handleCreatePatient)}
             />
           </ButtonContainer>
         </Content>
       </BackgroundContent>
-      {loading && (
-        <Modal transparent={true} animationType="fade" visible={loading}>
-          <Modal transparent={true} animationType="fade" visible={loading}>
-            <View style={styles.modalContainer}>
-              <View style={styles.loadingContainer}>
-                <ActivityIndicator size="large" color="green" />
-              </View>
-            </View>
-          </Modal>
-        </Modal>
-      )}
+      {loading && <LoadingModal loading={loading} />}
       <ConfirmationModal
         isVisible={isModalVisible}
         closeModal={closeModal}
@@ -207,22 +187,3 @@ export function RegisterPatients() {
     </Container>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  modalContainer: {
-    flex: 1,
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  loadingContainer: {
-    backgroundColor: "white",
-    padding: 20,
-    borderRadius: 10,
-  },
-});

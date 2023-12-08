@@ -1,25 +1,25 @@
-import React, { useEffect, useState } from "react";
+import React, {useState} from 'react';
 
-import { yupResolver } from "@hookform/resolvers/yup";
-import { useForm } from "react-hook-form";
+import {yupResolver} from '@hookform/resolvers/yup';
+import firestore from '@react-native-firebase/firestore';
+import {useForm} from 'react-hook-form';
+import {Text} from 'react-native';
+import uuid from 'react-native-uuid';
+import * as Yup from 'yup';
 import {
-  ActivityIndicator,
-  Alert,
-  Modal,
-  StyleSheet,
-  Text,
-  View,
-} from "react-native";
-import uuid from "react-native-uuid";
-import * as Yup from "yup";
-import { ButtonComponent } from "../../../components/ButtonComponent";
-import { GenreButton } from "../../../components/Forms/GenreButton";
-import { InputCalculations } from "../../../components/Forms/InputCalculations";
-import { ResultCalculationsComponent } from "../../../components/ResultCalculations";
-import firestore from "@react-native-firebase/firestore";
+  ButtonComponent,
+  ConfirmationModal,
+  GenreButton,
+  InputCalculations,
+  LoadingModal,
+  ResultCalculationsComponent,
+} from '../../../components';
 
-import { calcularIMC } from "./functions";
-import { FormDataCalc, ResultadoIMC, Sexo } from "./props";
+import {useRoute} from '@react-navigation/native';
+import ToastManager, {Toast} from 'toastify-react-native';
+import {PatientProps} from '../../globalProps';
+import {calcularIMC} from './functions';
+import {Sexo} from './props';
 import {
   BackgroundContent,
   ButtonContainer,
@@ -34,11 +34,7 @@ import {
   Content,
   PatientName,
   PatientTitle,
-} from "./styles";
-import { useRoute } from "@react-navigation/native";
-import { PatientProps } from "../../globalProps";
-import { ConfirmationModal } from "../../../components/modal";
-import ToastManager, { Toast} from "toastify-react-native";
+} from './styles';
 
 type modalProps = {
   type: 'success' | 'error';
@@ -47,15 +43,15 @@ type modalProps = {
 
 export function CalculationImc() {
   const route = useRoute();
-  const { patient } = route.params as { patient: PatientProps };
-  const [genre, setGenre] = useState<Sexo>(patient.genre || '' as any);
+  const {patient} = route.params as {patient: PatientProps};
+  const [genre, setGenre] = useState<Sexo>(patient.genre || ('' as any));
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [modalType, setModalType] = useState<modalProps>({}  as modalProps);
+  const [modalType, setModalType] = useState<modalProps>({} as modalProps);
   const [loading, setLoading] = useState(false);
   const [formValues, setFormValues] = useState({
-    age: "",
-    weight: "",
-    height: "",
+    age: '',
+    weight: '',
+    height: '',
     imc: patient.imc,
     diagnosticImc: patient.diagnosticImc,
   } as PatientProps);
@@ -70,19 +66,19 @@ export function CalculationImc() {
 
   const schema = Yup.object().shape({
     age: Yup.string()
-      .required("Digite sua idade")
+      .required('Digite sua idade')
       .min(1)
       .max(3)
       .required()
-      .matches(/^[0-9]+$/, "So pode ser usando numeros"),
-    weight: Yup.string().required("Digite o peso").min(1),
-    height: Yup.string().required("Digite a altura").min(1),
+      .matches(/^[0-9]+$/, 'So pode ser usando numeros'),
+    weight: Yup.string().required('Digite o peso').min(1),
+    height: Yup.string().required('Digite a altura').min(1),
   });
 
   const {
     control,
     handleSubmit,
-    formState: { errors },
+    formState: {errors},
     reset,
   } = useForm({
     defaultValues: {
@@ -96,7 +92,7 @@ export function CalculationImc() {
   });
 
   const handleCalculate = (form: PatientProps) => {
-    if (!genre) return Alert.alert("Selecione um gênero");
+    if (!genre) return Toast.error('Selecione um gênero!', 'top');
 
     const newCalculation = {
       id: String(uuid.v4()),
@@ -110,12 +106,12 @@ export function CalculationImc() {
 
     try {
       const result = calcularIMC(
-        parseFloat(form.weight|| '') ,
-        parseFloat(form.height|| ''),
+        parseFloat(form.weight || ''),
+        parseFloat(form.height || ''),
         parseInt(form.age),
-        genre
+        genre,
       );
-      setFormValues((prevFormValues) => ({
+      setFormValues(prevFormValues => ({
         ...prevFormValues,
         age: form.age,
         genre: genre,
@@ -127,10 +123,10 @@ export function CalculationImc() {
       if (!result) {
         reset();
       }
-      console.log(result)
-      Toast.success('Cálculos concluídos!')
+      console.log(result);
+      Toast.success('Cálculos concluídos!');
     } catch (err) {
-      Toast.error('Erro ao calcular IMC!', 'top')
+      Toast.error('Erro ao calcular IMC!', 'top');
       console.log(err);
     }
   };
@@ -139,7 +135,7 @@ export function CalculationImc() {
     setLoading(true);
 
     try {
-      firestore().collection("patients").doc(patient.key).update({
+      firestore().collection('patients').doc(patient.key).update({
         age: formValues.age,
         genre: genre,
         weight: formValues.weight,
@@ -147,14 +143,14 @@ export function CalculationImc() {
         imc: formValues.imc,
         diagnosticImc: formValues.diagnosticImc,
       });
-      setModalType({ title: "Paciente salvo com sucesso", type: "success" });
-        setTimeout(() => setLoading(false), 1000);
-        setTimeout(() => setIsModalVisible(true), 2000);
+      setModalType({title: 'Paciente salvo com sucesso', type: 'success'});
+      setTimeout(() => setLoading(false), 1000);
+      setTimeout(() => setIsModalVisible(true), 2000);
     } catch (error) {
-      setModalType({ title: "Erro ao salvar paciente", type: "error" });
-        setTimeout(() => setLoading(false), 1000);
-        setTimeout(() => setIsModalVisible(true), 2000);
-      console.error("Erro:", error);
+      setModalType({title: 'Erro ao salvar paciente', type: 'error'});
+      setTimeout(() => setLoading(false), 1000);
+      setTimeout(() => setIsModalVisible(true), 2000);
+      console.error('Erro:', error);
     }
   }
 
@@ -165,32 +161,29 @@ export function CalculationImc() {
   function handleClean() {
     setGenre(null),
       setFormValues({
-        age: "",
-        weight: "",
-        height: "",
-        imc: "",
-        diagnosticImc: "",
+        age: '',
+        weight: '',
+        height: '',
+        imc: '',
+        diagnosticImc: '',
       } as unknown as PatientProps);
     reset({
-      age: "",
-      weight: "",
-      height: "",
+      age: '',
+      weight: '',
+      height: '',
     });
-    Toast.warn('Cálculos resetados', 'top')
+    Toast.warn('Cálculos resetados', 'top');
   }
 
-  // useEffect(() => {
-  // }, [])
-
-  console.log("🔥", formValues);
+  console.log('🔥', formValues);
   return (
     <Container>
-        <ToastManager />
       <BackgroundContent>
+        <ToastManager />
         <Content showsVerticalScrollIndicator={false}>
           <ContainerCalculaters>
             <ResultCalculationsComponent
-              colorResult={(formValues?.diagnosticImc as any) || ""}
+              colorResult={(formValues?.diagnosticImc as any) || ''}
               percentageResult={
                 formValues?.imc ? (
                   formValues?.imc.toString()
@@ -198,16 +191,15 @@ export function CalculationImc() {
                   <Text
                     style={{
                       fontSize: 20,
-                      color: "gray",
-                      alignSelf: "center",
-                      justifyContent: "center",
-                    }}
-                  >
+                      color: 'gray',
+                      alignSelf: 'center',
+                      justifyContent: 'center',
+                    }}>
                     {`Paciente não possui cálculos`}
                   </Text>
                 )
               }
-              tableResult={formValues?.diagnosticImc || ""}
+              tableResult={formValues?.diagnosticImc || ''}
             />
             <ContainerPatient>
               <PatientTitle>Paciente:</PatientTitle>
@@ -215,12 +207,12 @@ export function CalculationImc() {
             </ContainerPatient>
             <Containergenre>
               <GenreButton
-                isActive={genre === "M"}
+                isActive={genre === 'M'}
                 type="M"
                 onPress={() => handlegenreButton(Sexo.masculino)}
               />
               <GenreButton
-                isActive={genre === "F"}
+                isActive={genre === 'F'}
                 type="F"
                 onPress={() => handlegenreButton(Sexo.feminino)}
               />
@@ -230,13 +222,13 @@ export function CalculationImc() {
                 name="age"
                 type="custom"
                 options={{
-                  mask: "999",
+                  mask: '999',
                 }}
                 TitleCalculate="Idade"
                 isActive={true}
                 control={control}
                 placeholder="0"
-                errorInput={errors.age && errors.age.message || ''}
+                errorInput={(errors.age && errors.age.message) || ''}
               />
             </ContainerAge>
             <ContainerSkinFolds>
@@ -245,13 +237,13 @@ export function CalculationImc() {
                   name="weight"
                   type="custom"
                   options={{
-                    mask: "999",
+                    mask: '999',
                   }}
                   TitleCalculate="Peso"
                   isActive={true}
                   control={control}
                   placeholder="0"
-                  errorInput={errors.weight && errors.weight.message || ''}
+                  errorInput={(errors.weight && errors.weight.message) || ''}
                 />
               </ContainerInputsdoubles>
               <ContainerInputsdoubles>
@@ -259,13 +251,13 @@ export function CalculationImc() {
                   name="height"
                   type="custom"
                   options={{
-                    mask: "9.99",
+                    mask: '9.99',
                   }}
                   TitleCalculate="Altura"
                   isActive={true}
                   control={control}
                   placeholder="0"
-                  errorInput={errors.height && errors.height.message || ''}
+                  errorInput={(errors.height && errors.height.message) || ''}
                 />
               </ContainerInputsdoubles>
             </ContainerSkinFolds>
@@ -273,14 +265,14 @@ export function CalculationImc() {
           <ButtonContainer>
             <ContainerInputsdoubles>
               <ButtonComponent
-                title={"Limpar"}
+                title={'Limpar'}
                 type="clean"
                 onPress={() => handleClean()}
               />
             </ContainerInputsdoubles>
             <ContainerInputsdoubles>
               <ButtonComponent
-                title={"Calcular"}
+                title={'Calcular'}
                 type="default"
                 onPress={handleSubmit(handleCalculate)}
               />
@@ -288,24 +280,14 @@ export function CalculationImc() {
           </ButtonContainer>
           <ButtonContainerSave>
             <ButtonComponent
-              title={"Salvar cálculos do paciente"}
+              title={'Salvar cálculos do paciente'}
               type="save"
               onPress={handleSavePatient}
             />
           </ButtonContainerSave>
         </Content>
       </BackgroundContent>
-      {loading && (
-        <Modal transparent={true} animationType="fade" visible={loading}>
-          <Modal transparent={true} animationType="fade" visible={loading}>
-            <View style={styles.modalContainer}>
-              <View style={styles.loadingContainer}>
-                <ActivityIndicator size="large" color="green" />
-              </View>
-            </View>
-          </Modal>
-        </Modal>
-      )}
+      {loading && <LoadingModal loading={loading} />}
       <ConfirmationModal
         type={modalType.type}
         isVisible={isModalVisible}
@@ -315,22 +297,3 @@ export function CalculationImc() {
     </Container>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  modalContainer: {
-    flex: 1,
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  loadingContainer: {
-    backgroundColor: "white",
-    padding: 20,
-    borderRadius: 10,
-  },
-});

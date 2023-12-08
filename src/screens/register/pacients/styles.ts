@@ -30,5 +30,5 @@ export const ContainerForm = styled.View`
 export const ButtonContainer = styled.View`
   margin-top: ${RFValue(90)}px;
   width: 100%;
-  /* margin-bottom: ${() => (Platform.OS === "android" ? "16px" : "0px")}; */
+  margin-bottom: ${() => (Platform.OS === "android" ? "16px" : "0px")};
 `

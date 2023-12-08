@@ -2,13 +2,14 @@ import "react-native-gesture-handler"
 import { useEffect } from "react"
 import { StatusBar } from "react-native"
 import { ThemeProvider } from "styled-components/native"
-import theme from "./src/global/styles/theme"
-import { RoutersApp } from "./src/routes/app.routers"
+
+import { RoutersApp } from "./routes/app.routers"
 
 
 import firebase from "@react-native-firebase/app"
-import { firebaseConfig } from "./src/services/fireBaseConfig"
+import { firebaseConfig } from "./services/fireBaseConfig"
 import "@react-native-firebase/firestore";
+import theme from "./global/styles/theme"
 
 export default function App() {
  

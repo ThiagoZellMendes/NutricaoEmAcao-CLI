@@ -28,18 +28,20 @@ end
 
 target 'NutricaoEmAcao' do
   config = use_native_modules!
-  # use_modular_headers!
+  use_modular_headers!
   # :modular_headers => true
   
-  pod 'FirebaseCore'
-  pod 'FirebaseFirestore'
-  pod 'FirebaseAuth'
+  # pod 'FirebaseCore'
+  # pod 'FirebaseFirestore'
+  # pod 'FirebaseAuth'
+  pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
 
 
 
   # use_frameworks!
   use_frameworks! :linkage => :static
   $RNFirebaseAsStaticFramework = true
+  # $FirebaseSDKVersion = '10.17.0'
 
   # Flags change depending on the env values.
   flags = get_default_flags()

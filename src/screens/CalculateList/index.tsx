@@ -8,7 +8,7 @@ import {
   ContainerTitle,
   Title,
 } from "./styles"
-import { ButtonComponent } from "../../components/ButtonComponent"
+import { ButtonComponent } from "../../components"
 import Logo2 from "../../assets/Logo2.svg"
 import { useNavigation, useRoute } from "@react-navigation/native"
 import { PatientProps } from "../globalProps"

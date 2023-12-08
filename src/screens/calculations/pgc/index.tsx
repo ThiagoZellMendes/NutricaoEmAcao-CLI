@@ -1,24 +1,24 @@
-import React, { useState } from "react";
+import React, {useState} from 'react';
 
-import { yupResolver } from "@hookform/resolvers/yup";
-import { useForm } from "react-hook-form";
+import {yupResolver} from '@hookform/resolvers/yup';
+import firestore from '@react-native-firebase/firestore';
+import {useRoute} from '@react-navigation/native';
+import {useForm} from 'react-hook-form';
+import {Alert, Text} from 'react-native';
+import uuid from 'react-native-uuid';
+import ToastManager, {Toast} from 'toastify-react-native';
+import * as Yup from 'yup';
 import {
-  ActivityIndicator,
-  Alert,
-  Modal,
-  StyleSheet,
-  Text,
-  View,
-} from "react-native";
-import uuid from "react-native-uuid";
-import * as Yup from "yup";
-import { ButtonComponent } from "../../../components/ButtonComponent";
-import { GenreButton } from "../../../components/Forms/GenreButton";
-import { InputCalculations } from "../../../components/Forms/InputCalculations";
-import { ResultCalculationsComponent } from "../../../components/ResultCalculations";
-import { calcularGorduraCorporal } from "./functions";
-import firestore from "@react-native-firebase/firestore";
-import { Sexo } from "./props";
+  ButtonComponent,
+  ConfirmationModal,
+  GenreButton,
+  InputCalculations,
+  LoadingModal,
+  ResultCalculationsComponent,
+} from '../../../components';
+import {PatientProps} from '../../globalProps';
+import {calcularGorduraCorporal} from './functions';
+import {Sexo} from './props';
 import {
   BackgroundContent,
   ButtonContainer,
@@ -33,30 +33,26 @@ import {
   Content,
   PatientName,
   PatientTitle,
-} from "./styles";
-import { PatientProps } from "../../globalProps";
-import { useRoute } from "@react-navigation/native";
-import { ConfirmationModal } from "../../../components/modal";
-import ToastManager, { Toast } from "toastify-react-native";
+} from './styles';
 
 type modalProps = {
-  type: "success" | "error";
+  type: 'success' | 'error';
   title: string;
 };
 
 export function CalculationPgc() {
   const route = useRoute();
-  const { patient } = route.params as { patient: PatientProps };
-  const [genre, setGenre] = useState<Sexo | null>(patient.genre || ("" as any));
+  const {patient} = route.params as {patient: PatientProps};
+  const [genre, setGenre] = useState<Sexo | null>(patient.genre || ('' as any));
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [modalType, setModalType] = useState<modalProps>({} as modalProps);
   const [loading, setLoading] = useState(false);
   const [formValues, setFormValues] = useState({
-    age: "",
-    biceps: "",
-    subescapular: "",
-    triceps: "",
-    supraIliaca: "",
+    age: '',
+    biceps: '',
+    subescapular: '',
+    triceps: '',
+    supraIliaca: '',
     categoryPcg: patient.categoryPcg,
     pgc: patient.pgc,
   });
@@ -67,21 +63,21 @@ export function CalculationPgc() {
 
   const schema = Yup.object().shape({
     age: Yup.string()
-      .required("Digite sua idade")
+      .required('Digite sua idade')
       .min(1)
       .max(3)
       .required()
-      .matches(/^[0-9]+$/, "Só pode serem usando numeros"),
-    triceps: Yup.string().required("Digite triceps").min(1),
-    biceps: Yup.string().required("Digite biceps").min(1),
-    subescapular: Yup.string().required("Digite subescapular").min(1),
-    supraIliaca: Yup.string().required("Digite suprailiaca").min(1),
+      .matches(/^[0-9]+$/, 'Só pode serem usando numeros'),
+    triceps: Yup.string().required('Digite triceps').min(1),
+    biceps: Yup.string().required('Digite biceps').min(1),
+    subescapular: Yup.string().required('Digite subescapular').min(1),
+    supraIliaca: Yup.string().required('Digite suprailiaca').min(1),
   });
 
   const {
     control,
     handleSubmit,
-    formState: { errors },
+    formState: {errors},
     reset,
   } = useForm({
     defaultValues: {
@@ -97,7 +93,7 @@ export function CalculationPgc() {
   });
 
   const handleCalculate = (form: PatientProps) => {
-    if (!genre) return Alert.alert("Selecione um gênero");
+    if (!genre) return Alert.alert('Selecione um gênero');
 
     const newCalculation = {
       id: String(uuid.v4()),
@@ -115,9 +111,9 @@ export function CalculationPgc() {
       const result = calcularGorduraCorporal(
         genre,
         parseInt(newCalculation.age),
-        newCalculation.dobras
+        newCalculation.dobras,
       );
-      setFormValues((prevFormValues) => ({
+      setFormValues(prevFormValues => ({
         ...prevFormValues,
         age: newCalculation.age,
         biceps: String(newCalculation.dobras.biceps),
@@ -131,11 +127,11 @@ export function CalculationPgc() {
         reset();
       }
 
-      console.log("🔥", result);
+      console.log('🔥', result);
 
-      Toast.success("Cálculos concluídos!");
+      Toast.success('Cálculos concluídos!');
     } catch (err) {
-      Toast.error("Erro ao calcular PGC!", "top");
+      Toast.error('Erro ao calcular PGC!', 'top');
       console.log(err);
     }
   };
@@ -144,7 +140,7 @@ export function CalculationPgc() {
     setLoading(true);
 
     try {
-      firestore().collection("patients").doc(patient.key).update({
+      firestore().collection('patients').doc(patient.key).update({
         age: formValues.age,
         genre: genre,
         biceps: formValues.biceps,
@@ -154,15 +150,15 @@ export function CalculationPgc() {
         categoryPcg: formValues.categoryPcg,
         pgc: formValues.pgc,
       });
-      setModalType({ title: "Paciente salvo com sucesso", type: "success" });
+      setModalType({title: 'Paciente salvo com sucesso', type: 'success'});
       setTimeout(() => setLoading(false), 1000);
       setTimeout(() => setIsModalVisible(true), 2000);
     } catch (error) {
       setLoading(false);
-      setModalType({ title: "Erro ao salvar paciente", type: "error" });
+      setModalType({title: 'Erro ao salvar paciente', type: 'error'});
       setTimeout(() => setLoading(false), 1000);
       setTimeout(() => setIsModalVisible(true), 2000);
-      console.error("Erro:", error);
+      console.error('Erro:', error);
     }
   }
 
@@ -173,22 +169,22 @@ export function CalculationPgc() {
   function handleClean() {
     setGenre(null),
       setFormValues({
-        age: "",
-        biceps: "",
-        subescapular: "",
-        triceps: "",
-        supraIliaca: "",
-        categoryPcg: "",
+        age: '',
+        biceps: '',
+        subescapular: '',
+        triceps: '',
+        supraIliaca: '',
+        categoryPcg: '',
         pgc: 0,
       });
     reset({
-      age: "",
-      biceps: "",
-      subescapular: "",
-      triceps: "",
-      supraIliaca: "",
+      age: '',
+      biceps: '',
+      subescapular: '',
+      triceps: '',
+      supraIliaca: '',
     });
-    Toast.warn("Cálculos resetados", "top");
+    Toast.warn('Cálculos resetados', 'top');
   }
 
   console.log(formValues);
@@ -196,28 +192,27 @@ export function CalculationPgc() {
   return (
     <Container>
       <BackgroundContent>
-      <ToastManager />
+        <ToastManager />
         <Content showsVerticalScrollIndicator={false}>
           <ContainerCalculaters>
             <ResultCalculationsComponent
               colorResult={formValues.categoryPcg as any}
               percentageResult={
                 formValues.pgc ? (
-                  formValues.pgc?.toFixed(2) + "%"
+                  formValues.pgc?.toFixed(2) + '%'
                 ) : (
                   <Text
                     style={{
                       fontSize: 20,
-                      color: "gray",
-                      alignSelf: "center",
-                      justifyContent: "center",
-                    }}
-                  >
+                      color: 'gray',
+                      alignSelf: 'center',
+                      justifyContent: 'center',
+                    }}>
                     {`Paciente não possui cálculos`}
                   </Text>
                 )
               }
-              tableResult={formValues.categoryPcg || ""}
+              tableResult={formValues.categoryPcg || ''}
             />
             <ContainerPatient>
               <PatientTitle>Paciente: </PatientTitle>
@@ -226,12 +221,12 @@ export function CalculationPgc() {
 
             <Containergenre>
               <GenreButton
-                isActive={genre === "M"}
+                isActive={genre === 'M'}
                 type="M"
                 onPress={() => handlegenreButton(Sexo.masculino)}
               />
               <GenreButton
-                isActive={genre === "F"}
+                isActive={genre === 'F'}
                 type="F"
                 onPress={() => handlegenreButton(Sexo.feminino)}
               />
@@ -241,13 +236,13 @@ export function CalculationPgc() {
                 name="age"
                 type="custom"
                 options={{
-                  mask: "999",
+                  mask: '999',
                 }}
                 TitleCalculate="Idade"
                 isActive={true}
                 control={control}
                 placeholder="0"
-                errorInput={errors.age && errors.age.message || ''}
+                errorInput={(errors.age && errors.age.message) || ''}
               />
             </ContainerAge>
             <ContainerSkinFolds>
@@ -256,13 +251,13 @@ export function CalculationPgc() {
                   name="triceps"
                   type="custom"
                   options={{
-                    mask: "9999999",
+                    mask: '9999999',
                   }}
                   TitleCalculate="Tríceps"
                   isActive={true}
                   control={control}
                   placeholder="0"
-                  errorInput={(errors.triceps && errors.triceps.message) || ""}
+                  errorInput={(errors.triceps && errors.triceps.message) || ''}
                 />
               </ContainerInputsdoubles>
               <ContainerInputsdoubles>
@@ -270,13 +265,13 @@ export function CalculationPgc() {
                   name="biceps"
                   type="custom"
                   options={{
-                    mask: "9999999",
+                    mask: '9999999',
                   }}
                   TitleCalculate="Bíceps"
                   isActive={true}
                   control={control}
                   placeholder="0"
-                  errorInput={(errors.biceps && errors.biceps.message) || ""}
+                  errorInput={(errors.biceps && errors.biceps.message) || ''}
                 />
               </ContainerInputsdoubles>
             </ContainerSkinFolds>
@@ -286,14 +281,14 @@ export function CalculationPgc() {
                   name="subescapular"
                   type="custom"
                   options={{
-                    mask: "9999999",
+                    mask: '9999999',
                   }}
                   TitleCalculate="subescapular"
                   isActive={true}
                   control={control}
                   placeholder="0"
                   errorInput={
-                    (errors.subescapular && errors.subescapular.message) || ""
+                    (errors.subescapular && errors.subescapular.message) || ''
                   }
                 />
               </ContainerInputsdoubles>
@@ -302,14 +297,14 @@ export function CalculationPgc() {
                   name="supraIliaca"
                   type="custom"
                   options={{
-                    mask: "9999999",
+                    mask: '9999999',
                   }}
                   TitleCalculate="Supra Íliaca"
                   isActive={true}
                   control={control}
                   placeholder="0"
                   errorInput={
-                    (errors.supraIliaca && errors.supraIliaca.message) || ""
+                    (errors.supraIliaca && errors.supraIliaca.message) || ''
                   }
                 />
               </ContainerInputsdoubles>
@@ -318,14 +313,14 @@ export function CalculationPgc() {
           <ButtonContainer>
             <ContainerInputsdoubles>
               <ButtonComponent
-                title={"Limpar"}
+                title={'Limpar'}
                 type="clean"
                 onPress={() => handleClean()}
               />
             </ContainerInputsdoubles>
             <ContainerInputsdoubles>
               <ButtonComponent
-                title={"Calcular"}
+                title={'Calcular'}
                 type="default"
                 onPress={handleSubmit(handleCalculate)}
               />
@@ -333,24 +328,14 @@ export function CalculationPgc() {
           </ButtonContainer>
           <ButtonContainerSave>
             <ButtonComponent
-              title={"Salvar cálculos do paciente"}
+              title={'Salvar cálculos do paciente'}
               type="save"
               onPress={handleSavePatient}
             />
           </ButtonContainerSave>
         </Content>
       </BackgroundContent>
-      {loading && (
-        <Modal transparent={true} animationType="fade" visible={loading}>
-          <Modal transparent={true} animationType="fade" visible={loading}>
-            <View style={styles.modalContainer}>
-              <View style={styles.loadingContainer}>
-                <ActivityIndicator size="large" color="green" />
-              </View>
-            </View>
-          </Modal>
-        </Modal>
-      )}
+      {loading && <LoadingModal loading={loading} />}
       <ConfirmationModal
         type={modalType.type}
         isVisible={isModalVisible}
@@ -360,21 +345,3 @@ export function CalculationPgc() {
     </Container>
   );
 }
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  modalContainer: {
-    flex: 1,
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  loadingContainer: {
-    backgroundColor: "white",
-    padding: 20,
-    borderRadius: 10,
-  },
-});

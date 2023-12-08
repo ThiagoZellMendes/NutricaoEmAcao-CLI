@@ -27,8 +27,7 @@ export const ContainerLogo = styled.View`
 `
 
 export const ContainerForm = styled(View)`
-  width: 100%;
-  margin-bottom: ${RFValue(16)}px;
+  margin:  16px 0;
 `
 
 export const ContainerLink = styled.TouchableOpacity.attrs({
@@ -37,7 +36,7 @@ export const ContainerLink = styled.TouchableOpacity.attrs({
 
 export const TextLink = styled.Text`
   font-size: ${RFValue(14)}px;
-  color: ${({ theme }) => theme.colors.title};
+  color: ${({ theme }) => theme.colors.Adequado};
   margin-top: ${RFValue(10)}px;
   align-self: center;
 `

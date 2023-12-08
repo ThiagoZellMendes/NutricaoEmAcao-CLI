@@ -2,7 +2,7 @@ import { RectButtonProps } from "react-native-gesture-handler"
 
 export interface ButtonComponentProps extends RectButtonProps {
   title: string
-  nameIcon?: string
+  nameIcon?: string 
   onPress: () => void
   type: "clean" | "default" | 'save'
 }

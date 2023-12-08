@@ -18,6 +18,12 @@ export const DropdownList = styled(Dropdown).attrs(({ theme }) => ({
   color: ${({theme}) => theme.colors.title_dark};
   background-color: ${({theme}) => theme.colors.shape};
   border-radius: 4px;
-  border: 1px solid;
+  border: 1.5px solid;
   border-color: ${({ theme }) => theme.colors.text};
+`;
+
+export const TitleInput = styled.Text`
+  font-size: ${RFValue(12)}px;
+  font-weight: bold;
+  color: ${({ theme }) => theme.colors.title};
 `;
