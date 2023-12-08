@@ -9,7 +9,7 @@ export const INPUTS = () =>
       id: 1,
       title: 'Cpf',
       name: 'cpf',
-      autoCapitalize: 'words',
+      autoCapitalize: 'none',
       type: 'cpf',
       autoCorrect: false,
       keyboardType: 'default',
@@ -26,7 +26,7 @@ export const INPUTS = () =>
       options: {
         mask: '*******************************************************',
       },
-      autoCapitalize: 'words',
+      autoCapitalize: 'sentences',
       autoCorrect: false,
       typePassword: false,
       keyboardType: 'default',

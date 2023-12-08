@@ -22,7 +22,3 @@ export function ResultCalculationsComponent({
     </Container>
   )
 }
-
-TextResultPercentage
-ContainerResult
-TextResultTable

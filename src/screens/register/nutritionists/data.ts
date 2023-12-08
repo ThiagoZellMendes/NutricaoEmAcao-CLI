@@ -10,7 +10,7 @@ export const INPUTS = () =>
       id: 1,
       title: 'Nome',
       name: 'firstName',
-      autoCapitalize: 'words',
+      autoCapitalize: 'sentences',
       type: 'custom',
       options: {
         mask: '*******************************************************',
@@ -30,7 +30,7 @@ export const INPUTS = () =>
       options: {
         mask: '*******************************************************',
       },
-      autoCapitalize: 'words',
+      autoCapitalize: 'sentences',
       autoCorrect: false,
       typePassword: false,
       keyboardType: 'default',
