@@ -1,22 +1,15 @@
-import React from "react"
+import React from 'react';
 
-import { ButtonComponentProps } from "./props"
-import { Button, Container, Icon, Text } from "./styles"
+import { ButtonComponentProps } from './props';
+import { Button, Container, Icon, Text } from './styles';
 
-export function ButtonComponent({
-  title,
-  nameIcon,
-  onPress,
-  type,
-  ...rest
-}: ButtonComponentProps) {
+export function ButtonComponent({ title, nameIcon, onPress, sizeIcon, type, ...rest }: ButtonComponentProps) {
   return (
-
-    <Container  type={type}>
+    <Container type={type}>
       <Button onPress={onPress} {...rest}>
         <Text>{title}</Text>
-        {nameIcon ?  <Icon name={nameIcon} /> : undefined }
+        {nameIcon ? <Icon name={nameIcon} size={sizeIcon} /> : undefined}
       </Button>
     </Container>
-  )
+  );
 }

@@ -1,5 +1,6 @@
-import { Control } from "react-hook-form";
-import { TextInputMaskProps } from "react-native-masked-text";
+import { Control } from 'react-hook-form';
+import { TextInput } from 'react-native';
+import { TextInputMaskProps } from 'react-native-masked-text';
 
 export interface InputProps extends TextInputMaskProps {
   control: Control<any>;
@@ -7,8 +8,9 @@ export interface InputProps extends TextInputMaskProps {
   errorInput?: string;
   typePassword?: boolean;
   title: string;
+  forwardedRef?: React.RefObject<TextInput>;
 }
 
 export interface InputFormStyles {
-  error: boolean
+  error: boolean;
 }

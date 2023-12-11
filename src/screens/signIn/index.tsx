@@ -1,22 +1,17 @@
-import React, {useRef, useState} from 'react';
+import React, { useRef, useState } from 'react';
 
-import {yupResolver} from '@hookform/resolvers/yup';
-import {useNavigation} from '@react-navigation/native';
-import {useForm} from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { useNavigation } from '@react-navigation/native';
+import { useForm } from 'react-hook-form';
 
 import auth from '@react-native-firebase/auth';
 import Logo2 from '../../assets/Logo2.svg';
-import {
-  ButtonComponent,
-  FeedbackModal,
-  InputForm,
-  LoadingModal,
-} from '../../components';
+import { ButtonComponent, FeedbackModal, InputForm, LoadingModal } from '../../components';
 
-import {Dimensions, findNodeHandle} from 'react-native';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import {INPUTS as INPUTCOLLECIONS, textInputShapeYup} from './data';
-import {InputProps, PropsSignIn, valueName} from './props';
+import { Dimensions, findNodeHandle } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { INPUTS as INPUTCOLLECIONS, textInputShapeYup } from './data';
+import { InputProps, PropsSignIn, valueName } from './props';
 import {
   BackgroundContent,
   ButtonContainer,
@@ -25,21 +20,21 @@ import {
   ContainerLink,
   ContainerLogo,
   Content,
-  TextLink,
+  TextLink
 } from './styles';
 
 export function SignIn() {
-  const {navigate} = useNavigation<any>();
+  const { navigate } = useNavigation<any>();
   const scrollViewRef = useRef<KeyboardAwareScrollView>(null);
   const [, setCurrentInputFocus] = useState(0);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [loading, setLoading] = useState(false);
   const [modalType, setModalType] = useState('');
 
-  const INPUTS: InputProps[] = INPUTCOLLECIONS().map(item =>
+  const INPUTS: InputProps[] = INPUTCOLLECIONS().map((item) =>
     Object.assign(item, {
-      ref: useRef(null),
-    }),
+      ref: useRef(null)
+    })
   );
 
   const closeModal = () => {
@@ -49,10 +44,10 @@ export function SignIn() {
   const {
     control,
     handleSubmit,
-    formState: {errors},
-    reset,
+    formState: { errors },
+    reset
   } = useForm({
-    resolver: yupResolver(textInputShapeYup()),
+    resolver: yupResolver(textInputShapeYup())
   });
 
   async function handleSignIn(form: PropsSignIn) {
@@ -96,7 +91,7 @@ export function SignIn() {
                     scrollViewRef.current?.scrollToFocusedInput(
                       findNodeHandle(event.target) || 0,
                       (Dimensions.get('window').height / INPUTS.length) * 1.15,
-                      0,
+                      0
                     );
                     setCurrentInputFocus(index);
                   }}
@@ -107,6 +102,7 @@ export function SignIn() {
           </ContainerForm>
           <ButtonContainer>
             <ButtonComponent
+              sizeIcon={25}
               type="default"
               title={'Acessar'}
               nameIcon="chevron-right"

@@ -1,3 +1,5 @@
+import { TextInput } from "react-native";
+
 export interface NutritionistProps {
   firstName: string;
   lastName: string;
@@ -9,6 +11,7 @@ export interface NutritionistProps {
 export type valueName = 'firstName' | 'lastName' | 'cpf' | 'email' | 'password' | 'password';
 
 export type InputProps = {
+  forwardedRef: React.RefObject<TextInput>;
   id: number;
   title: string;
   name: string;

@@ -1,3 +1,5 @@
+import { TextInput } from "react-native";
+
 export interface PatientProps {
   fullName: string
   cpf: string
@@ -6,6 +8,7 @@ export interface PatientProps {
 
 export type InputProps = {
   id: number;
+  forwardedRef: React.RefObject<TextInput>;
   title: string;
   name: string;
   autoCapitalize: 'none' | 'sentences' | 'words' | 'characters' | undefined;

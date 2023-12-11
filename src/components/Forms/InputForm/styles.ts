@@ -21,7 +21,7 @@ export const Content = styled.View<InputFormStyles>`
 `;
 
 export const TitleInput = styled.Text<InputFormStyles>`
-  padding-top: ${RFValue(12)}px;
+  padding-top: ${RFValue(5)}px;
   font-size: ${RFValue(12)}px;
   font-weight: bold;
   color: ${({ error, theme }) =>

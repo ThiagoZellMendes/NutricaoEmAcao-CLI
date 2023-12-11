@@ -43,7 +43,7 @@ export function RegisterNutritionists() {
 
   const INPUTS: InputProps[] = INPUTCOLLECIONS().map(item =>
     Object.assign(item, {
-      ref: useRef<TextInput>(null),
+      forwardedRef: useRef<TextInput>(null),
     }),
   );
   const {
@@ -117,50 +117,66 @@ export function RegisterNutritionists() {
   return (
     <Container>
       <BackgroundContent>
-        <Content showsVerticalScrollIndicator={false}>
-          <ContainerLogo>
-            <Logo2 />
-          </ContainerLogo>
-          <ContainerForm>
-            {INPUTS.map((item, index) => {
-              const itemName = item.name as valueName;
-              return (
-                <InputForm
-                  key={item.id}
-                  title={item.title}
-                  name={item.name}
-                  type={item.type}
-                  options={item.options}
-                  control={control}
-                  autoCapitalize={item.autoCapitalize}
-                  autoCorrect={item.autoCorrect}
-                  placeholder={item.placeholder}
-                  keyboardType={item.keyboardType}
-                  typePassword={item.typePassword}
-                  returnKeyType={INPUTS.length === index + 1 ? 'send' : 'next'}
-                  onFocus={(event: any) => {
-                    scrollViewRef.current?.scrollToFocusedInput(
-                      findNodeHandle(event.target) || 0,
-                      (Dimensions.get('window').height / INPUTS.length) * 1.15,
-                      0,
-                    );
-                    setCurrentInputFocus(index);
-                  }}
-                  errorInput={errors[itemName]?.message}
-                />
-              );
-            })}
-          </ContainerForm>
+        <KeyboardAwareScrollView
+          style={{flex: 1}}
+          contentContainerStyle={{flexGrow: 1}}
+          extraHeight={100} // Ajuste conforme necessário
+          ref={scrollViewRef}
+          keyboardShouldPersistTaps="handled">
+          <Content showsVerticalScrollIndicator={false}>
+            <ContainerLogo>
+              <Logo2 />
+            </ContainerLogo>
+            <ContainerForm>
+              {INPUTS.map((item, index) => {
+                const itemName = item.name as valueName;
+                return (
+                  <InputForm
+                    forwardedRef={item.forwardedRef}
+                    key={item.id}
+                    title={item.title}
+                    name={item.name}
+                    type={item.type}
+                    options={item.options}
+                    control={control}
+                    autoCapitalize={item.autoCapitalize}
+                    autoCorrect={item.autoCorrect}
+                    placeholder={item.placeholder}
+                    keyboardType={item.keyboardType}
+                    typePassword={item.typePassword}
+                    errorInput={errors[itemName]?.message}
+                    returnKeyType={
+                      INPUTS.length === index + 1 ? 'send' : 'next'
+                    }
+                    onSubmitEditing={
+                      INPUTS.length === index + 1
+                        ? handleSubmit(handleCreateNutritionist)
+                        : () => INPUTS[index + 1].forwardedRef.current?.focus()
+                    }
+                    onFocus={event => {
+                      scrollViewRef.current?.scrollToFocusedInput(
+                        findNodeHandle(event.target) || 0,
+                        (Dimensions.get('window').height / INPUTS.length) *
+                          1.15,
+                        0,
+                      );
+                      setCurrentInputFocus(index);
+                    }}
+                  />
+                );
+              })}
+            </ContainerForm>
 
-          <ButtonContainer>
-            <ButtonComponent
-              type="default"
-              title={'Cadastrar'}
-              nameIcon="chevron-right"
-              onPress={handleSubmit(handleCreateNutritionist)}
-            />
-          </ButtonContainer>
-        </Content>
+            <ButtonContainer>
+              <ButtonComponent
+                type="default"
+                title={'Cadastrar'}
+                nameIcon="chevron-right"
+                onPress={handleSubmit(handleCreateNutritionist)}
+              />
+            </ButtonContainer>
+          </Content>
+        </KeyboardAwareScrollView>
       </BackgroundContent>
       {loading && <LoadingModal loading={loading} />}
       <FeedbackModal

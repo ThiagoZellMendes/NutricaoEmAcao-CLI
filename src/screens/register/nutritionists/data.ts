@@ -99,7 +99,7 @@ export const INPUTS = () =>
       placeholder: 'Confirme sua senha',
       onChangeText: (value: string) => value,
     },
-  ] as InputProps[];
+  ] as unknown as InputProps[];
  
  
  export const textInputShapeYup = () =>

@@ -8,22 +8,33 @@ module.exports = {
   presets: ['module:metro-react-native-babel-preset'],
   plugins: [
     'react-native-reanimated/plugin',
-  //   [
-  //     'module:react-native-dotenv',
-  //     {
-  //       moduleName: 'react-native-dotenv',
-  //       envName: 'ENVFILE',
-  //     },
-  //   ],
-  //   [
-  //     'module-resolver',
-  //     {
-  //       root: ['./src'],
-  //       extensions: ['.ios.js', '.android.js', '.js', '.ts', '.tsx', '.json'],
-  //       alias: {
-  //         'test/*': ['./test/'],
-  //       },
-  //     },
-  //   ],
-  ],
+    //   [
+    //     'module:react-native-dotenv',
+    //     {
+    //       moduleName: 'react-native-dotenv',
+    //       envName: 'ENVFILE',
+    //     },
+    //   ],
+    //   [
+    //     'module-resolver',
+    //     {
+    //       root: ['./src'],
+    //       extensions: ['.ios.js', '.android.js', '.js', '.ts', '.tsx', '.json'],
+    //       alias: {
+    //         'test/*': ['./test/'],
+    //       },
+    //     },
+    //   ],
+    [
+      'module-resolver',
+      {
+        root: ['./src'],
+        alias: {
+          '@screens': './src/screens',
+          '@components': './src/components',
+          '@utils': './src/utils'
+        }
+      }
+    ]
+  ]
 };

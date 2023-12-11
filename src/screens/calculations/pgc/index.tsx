@@ -1,12 +1,13 @@
-import React, {useState} from 'react';
+import React, { useRef, useState } from 'react';
 
-import {yupResolver} from '@hookform/resolvers/yup';
+import { yupResolver } from '@hookform/resolvers/yup';
 import firestore from '@react-native-firebase/firestore';
-import {useRoute} from '@react-navigation/native';
-import {useForm} from 'react-hook-form';
-import {Alert, Text} from 'react-native';
+import { useNavigation, useRoute } from '@react-navigation/native';
+import { useForm } from 'react-hook-form';
+import { Alert, Text } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import uuid from 'react-native-uuid';
-import ToastManager, {Toast} from 'toastify-react-native';
+import ToastManager, { Toast } from 'toastify-react-native';
 import * as Yup from 'yup';
 import {
   ButtonComponent,
@@ -14,11 +15,11 @@ import {
   GenreButton,
   InputCalculations,
   LoadingModal,
-  ResultCalculationsComponent,
+  ResultCalculationsComponent
 } from '../../../components';
-import {PatientProps} from '../../globalProps';
-import {calcularGorduraCorporal} from './functions';
-import {Sexo} from './props';
+import { PatientProps } from '../../globalProps';
+import { calcularGorduraCorporal } from './functions';
+import { Sexo } from './props';
 import {
   BackgroundContent,
   ButtonContainer,
@@ -32,7 +33,7 @@ import {
   Containergenre,
   Content,
   PatientName,
-  PatientTitle,
+  PatientTitle
 } from './styles';
 
 type modalProps = {
@@ -41,8 +42,10 @@ type modalProps = {
 };
 
 export function CalculationPgc() {
+  const navigation = useNavigation<any>();
+  const scrollViewRef = useRef<KeyboardAwareScrollView>(null);
   const route = useRoute();
-  const {patient} = route.params as {patient: PatientProps};
+  const { patient } = route.params as { patient: PatientProps };
   const [genre, setGenre] = useState<Sexo | null>(patient.genre || ('' as any));
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [modalType, setModalType] = useState<modalProps>({} as modalProps);
@@ -54,12 +57,8 @@ export function CalculationPgc() {
     triceps: '',
     supraIliaca: '',
     categoryPcg: patient.categoryPcg,
-    pgc: patient.pgc,
+    pgc: patient.pgc
   });
-
-  const closeModal = () => {
-    setIsModalVisible(false);
-  };
 
   const schema = Yup.object().shape({
     age: Yup.string()
@@ -68,28 +67,28 @@ export function CalculationPgc() {
       .max(3)
       .required()
       .matches(/^[0-9]+$/, 'Só pode serem usando numeros'),
-    triceps: Yup.string().required('Digite triceps').min(1),
     biceps: Yup.string().required('Digite biceps').min(1),
+    triceps: Yup.string().required('Digite triceps').min(1),
     subescapular: Yup.string().required('Digite subescapular').min(1),
-    supraIliaca: Yup.string().required('Digite suprailiaca').min(1),
+    supraIliaca: Yup.string().required('Digite suprailiaca').min(1)
   });
 
   const {
     control,
     handleSubmit,
-    formState: {errors},
-    reset,
+    formState: { errors },
+    reset
   } = useForm({
     defaultValues: {
       age: patient.age || '',
       biceps: patient.biceps || '',
-      subescapular: patient.subescapular || '',
       triceps: patient.triceps || '',
+      subescapular: patient.subescapular || '',
       supraIliaca: patient.supraIliaca || '',
       categoryPcg: patient.categoryPcg || '',
-      pgc: patient.pgc || '',
-    } as PatientProps,
-    resolver: yupResolver(schema),
+      pgc: patient.pgc || ''
+    } as unknown as PatientProps,
+    resolver: yupResolver(schema)
   });
 
   const handleCalculate = (form: PatientProps) => {
@@ -103,17 +102,13 @@ export function CalculationPgc() {
         triceps: parseFloat(form.triceps || ''),
         biceps: parseFloat(form.biceps || ''),
         subescapular: parseFloat(form.subescapular || ''),
-        supraIliaca: parseFloat(form.supraIliaca || ''),
-      },
+        supraIliaca: parseFloat(form.supraIliaca || '')
+      }
     };
 
     try {
-      const result = calcularGorduraCorporal(
-        genre,
-        parseInt(newCalculation.age),
-        newCalculation.dobras,
-      );
-      setFormValues(prevFormValues => ({
+      const result = calcularGorduraCorporal(genre, parseInt(newCalculation.age), newCalculation.dobras);
+      setFormValues((prevFormValues) => ({
         ...prevFormValues,
         age: newCalculation.age,
         biceps: String(newCalculation.dobras.biceps),
@@ -121,7 +116,7 @@ export function CalculationPgc() {
         triceps: String(newCalculation.dobras.triceps),
         supraIliaca: String(newCalculation.dobras.supraIliaca),
         categoryPcg: result.categoria,
-        pgc: result.percentual,
+        pgc: result.percentual
       }));
       if (!result) {
         reset();
@@ -148,14 +143,14 @@ export function CalculationPgc() {
         triceps: formValues.triceps,
         supraIliaca: formValues.supraIliaca,
         categoryPcg: formValues.categoryPcg,
-        pgc: formValues.pgc,
+        pgc: formValues.pgc
       });
-      setModalType({title: 'Paciente salvo com sucesso', type: 'success'});
+      setModalType({ title: 'Paciente salvo com sucesso', type: 'success' });
       setTimeout(() => setLoading(false), 1000);
       setTimeout(() => setIsModalVisible(true), 2000);
     } catch (error) {
       setLoading(false);
-      setModalType({title: 'Erro ao salvar paciente', type: 'error'});
+      setModalType({ title: 'Erro ao salvar paciente', type: 'error' });
       setTimeout(() => setLoading(false), 1000);
       setTimeout(() => setIsModalVisible(true), 2000);
       console.error('Erro:', error);
@@ -166,6 +161,11 @@ export function CalculationPgc() {
     setGenre(type);
   }
 
+  const closeModal = () => {
+    setIsModalVisible(false);
+    navigation.navigate('PatientDetails', { patient: { ...patient, ...formValues } });
+  };
+
   function handleClean() {
     setGenre(null),
       setFormValues({
@@ -175,14 +175,14 @@ export function CalculationPgc() {
         triceps: '',
         supraIliaca: '',
         categoryPcg: '',
-        pgc: 0,
+        pgc: 0
       });
     reset({
       age: '',
       biceps: '',
       subescapular: '',
       triceps: '',
-      supraIliaca: '',
+      supraIliaca: ''
     });
     Toast.warn('Cálculos resetados', 'top');
   }
@@ -192,156 +192,144 @@ export function CalculationPgc() {
   return (
     <Container>
       <BackgroundContent>
-        <ToastManager />
-        <Content showsVerticalScrollIndicator={false}>
-          <ContainerCalculaters>
-            <ResultCalculationsComponent
-              colorResult={formValues.categoryPcg as any}
-              percentageResult={
-                formValues.pgc ? (
-                  formValues.pgc?.toFixed(2) + '%'
-                ) : (
-                  <Text
-                    style={{
-                      fontSize: 20,
-                      color: 'gray',
-                      alignSelf: 'center',
-                      justifyContent: 'center',
-                    }}>
-                    {`Paciente não possui cálculos`}
-                  </Text>
-                )
-              }
-              tableResult={formValues.categoryPcg || ''}
-            />
-            <ContainerPatient>
-              <PatientTitle>Paciente: </PatientTitle>
-              <PatientName>{`${patient.fullName}`}</PatientName>
-            </ContainerPatient>
+        <KeyboardAwareScrollView
+          style={{ flex: 1 }}
+          contentContainerStyle={{ flexGrow: 1 }}
+          extraHeight={100} // Ajuste conforme necessário
+          ref={scrollViewRef}
+          keyboardShouldPersistTaps="handled"
+        >
+          <ToastManager />
+          <Content showsVerticalScrollIndicator={false}>
+            <ContainerCalculaters>
+              <ResultCalculationsComponent
+                colorResult={formValues.categoryPcg as any}
+                percentageResult={
+                  formValues.pgc ? (
+                    formValues.pgc?.toFixed(2) + '%'
+                  ) : (
+                    <Text
+                      style={{
+                        fontSize: 20,
+                        color: 'gray',
+                        alignSelf: 'center',
+                        justifyContent: 'center'
+                      }}
+                    >
+                      {`Paciente não possui cálculos`}
+                    </Text>
+                  )
+                }
+                tableResult={formValues.categoryPcg || ''}
+              />
+              <ContainerPatient>
+                <PatientTitle>Paciente: </PatientTitle>
+                <PatientName>{`${patient.fullName}`}</PatientName>
+              </ContainerPatient>
 
-            <Containergenre>
-              <GenreButton
-                isActive={genre === 'M'}
-                type="M"
-                onPress={() => handlegenreButton(Sexo.masculino)}
-              />
-              <GenreButton
-                isActive={genre === 'F'}
-                type="F"
-                onPress={() => handlegenreButton(Sexo.feminino)}
-              />
-            </Containergenre>
-            <ContainerAge>
-              <InputCalculations
-                name="age"
-                type="custom"
-                options={{
-                  mask: '999',
-                }}
-                TitleCalculate="Idade"
-                isActive={true}
-                control={control}
-                placeholder="0"
-                errorInput={(errors.age && errors.age.message) || ''}
-              />
-            </ContainerAge>
-            <ContainerSkinFolds>
-              <ContainerInputsdoubles>
+              <Containergenre>
+                <GenreButton
+                  isActive={genre === 'Masculino'}
+                  type="Masculino"
+                  onPress={() => handlegenreButton(Sexo.Masculino)}
+                />
+                <GenreButton
+                  isActive={genre === 'Feminino'}
+                  type="Feminino"
+                  onPress={() => handlegenreButton(Sexo.Feminino)}
+                />
+              </Containergenre>
+              <ContainerAge>
                 <InputCalculations
-                  name="triceps"
+                  name="age"
                   type="custom"
                   options={{
-                    mask: '9999999',
+                    mask: '999'
                   }}
-                  TitleCalculate="Tríceps"
+                  TitleCalculate="Idade"
                   isActive={true}
                   control={control}
                   placeholder="0"
-                  errorInput={(errors.triceps && errors.triceps.message) || ''}
+                  errorInput={(errors.age && errors.age.message) || ''}
                 />
+              </ContainerAge>
+              <ContainerSkinFolds>
+                <ContainerInputsdoubles>
+                  <InputCalculations
+                    name="triceps"
+                    type="custom"
+                    options={{
+                      mask: '9999999'
+                    }}
+                    TitleCalculate="Tríceps"
+                    isActive={true}
+                    control={control}
+                    placeholder="0"
+                    errorInput={(errors.triceps && errors.triceps.message) || ''}
+                  />
+                </ContainerInputsdoubles>
+                <ContainerInputsdoubles>
+                  <InputCalculations
+                    name="biceps"
+                    type="custom"
+                    options={{
+                      mask: '9999999'
+                    }}
+                    TitleCalculate="Bíceps"
+                    isActive={true}
+                    control={control}
+                    placeholder="0"
+                    errorInput={(errors.biceps && errors.biceps.message) || ''}
+                  />
+                </ContainerInputsdoubles>
+              </ContainerSkinFolds>
+              <ContainerSkinFolds>
+                <ContainerInputsdoubles>
+                  <InputCalculations
+                    name="subescapular"
+                    type="custom"
+                    options={{
+                      mask: '9999999'
+                    }}
+                    TitleCalculate="subescapular"
+                    isActive={true}
+                    control={control}
+                    placeholder="0"
+                    errorInput={(errors.subescapular && errors.subescapular.message) || ''}
+                  />
+                </ContainerInputsdoubles>
+                <ContainerInputsdoubles>
+                  <InputCalculations
+                    name="supraIliaca"
+                    type="custom"
+                    options={{
+                      mask: '9999999'
+                    }}
+                    TitleCalculate="Supra Íliaca"
+                    isActive={true}
+                    control={control}
+                    placeholder="0"
+                    errorInput={(errors.supraIliaca && errors.supraIliaca.message) || ''}
+                  />
+                </ContainerInputsdoubles>
+              </ContainerSkinFolds>
+            </ContainerCalculaters>
+            <ButtonContainer>
+              <ContainerInputsdoubles>
+                <ButtonComponent title={'Limpar'} type="clean" onPress={() => handleClean()} />
               </ContainerInputsdoubles>
               <ContainerInputsdoubles>
-                <InputCalculations
-                  name="biceps"
-                  type="custom"
-                  options={{
-                    mask: '9999999',
-                  }}
-                  TitleCalculate="Bíceps"
-                  isActive={true}
-                  control={control}
-                  placeholder="0"
-                  errorInput={(errors.biceps && errors.biceps.message) || ''}
-                />
+                <ButtonComponent title={'Calcular'} type="default" onPress={handleSubmit(handleCalculate)} />
               </ContainerInputsdoubles>
-            </ContainerSkinFolds>
-            <ContainerSkinFolds>
-              <ContainerInputsdoubles>
-                <InputCalculations
-                  name="subescapular"
-                  type="custom"
-                  options={{
-                    mask: '9999999',
-                  }}
-                  TitleCalculate="subescapular"
-                  isActive={true}
-                  control={control}
-                  placeholder="0"
-                  errorInput={
-                    (errors.subescapular && errors.subescapular.message) || ''
-                  }
-                />
-              </ContainerInputsdoubles>
-              <ContainerInputsdoubles>
-                <InputCalculations
-                  name="supraIliaca"
-                  type="custom"
-                  options={{
-                    mask: '9999999',
-                  }}
-                  TitleCalculate="Supra Íliaca"
-                  isActive={true}
-                  control={control}
-                  placeholder="0"
-                  errorInput={
-                    (errors.supraIliaca && errors.supraIliaca.message) || ''
-                  }
-                />
-              </ContainerInputsdoubles>
-            </ContainerSkinFolds>
-          </ContainerCalculaters>
-          <ButtonContainer>
-            <ContainerInputsdoubles>
-              <ButtonComponent
-                title={'Limpar'}
-                type="clean"
-                onPress={() => handleClean()}
-              />
-            </ContainerInputsdoubles>
-            <ContainerInputsdoubles>
-              <ButtonComponent
-                title={'Calcular'}
-                type="default"
-                onPress={handleSubmit(handleCalculate)}
-              />
-            </ContainerInputsdoubles>
-          </ButtonContainer>
-          <ButtonContainerSave>
-            <ButtonComponent
-              title={'Salvar cálculos do paciente'}
-              type="save"
-              onPress={handleSavePatient}
-            />
-          </ButtonContainerSave>
-        </Content>
+            </ButtonContainer>
+            <ButtonContainerSave>
+              <ButtonComponent title={'Salvar cálculos do paciente'} type="save" onPress={handleSavePatient} />
+            </ButtonContainerSave>
+          </Content>
+        </KeyboardAwareScrollView>
       </BackgroundContent>
       {loading && <LoadingModal loading={loading} />}
-      <FeedbackModal
-        type={modalType.type}
-        isVisible={isModalVisible}
-        closeModal={closeModal}
-        title={modalType.title}
-      />
+      <FeedbackModal type={modalType.type} isVisible={isModalVisible} closeModal={closeModal} title={modalType.title} />
     </Container>
   );
 }

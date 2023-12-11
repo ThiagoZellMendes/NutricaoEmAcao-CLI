@@ -1,15 +1,15 @@
-import  Ionicons  from "react-native-vector-icons/Ionicons"
-import { RectButton } from "react-native-gesture-handler";
-import { RFValue } from "react-native-responsive-fontsize";
-import styled, { css } from "styled-components/native";
+import { RectButton } from 'react-native-gesture-handler';
+import { RFValue } from 'react-native-responsive-fontsize';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import styled, { css } from 'styled-components/native';
 
 interface IconsProps {
-  type: "M" | "F";
+  type: 'Masculino' | 'Feminino';
 }
 
 interface ContainerProps {
   isActive: boolean;
-  type: "M" | "F";
+  type: 'Masculino' | 'Feminino';
 }
 
 export const Container = styled.View<ContainerProps>`
@@ -18,18 +18,17 @@ export const Container = styled.View<ContainerProps>`
   border-style: solid;
   border-color: ${({ theme }) => theme.colors.title};
   border-radius: 5px;
-  background-color: ${({ theme }) => theme.colors.background};;
-  
+  background-color: ${({ theme }) => theme.colors.background};
 
   ${({ isActive, type }) =>
     isActive &&
-    type === "M" &&
+    type === 'Masculino' &&
     css`
       background-color: ${({ theme }) => theme.colors.genreMan};
     `}
   ${({ isActive, type }) =>
     isActive &&
-    type === "F" &&
+    type === 'Feminino' &&
     css`
       background-color: ${({ theme }) => theme.colors.genreWoman};
     `}
@@ -46,8 +45,7 @@ export const Icon = styled(Ionicons)<IconsProps>`
   font-size: ${RFValue(24)}px;
   margin-right: 12px;
   color: #000;
-  /* color: ${({ theme, type }) =>
-    type === "M" ? theme.colors.success : theme.colors.attention}; */
+  /* color: ${({ theme, type }) => (type === 'Masculino' ? theme.colors.success : theme.colors.attention)}; */
 `;
 
 export const Title = styled.Text`

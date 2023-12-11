@@ -1,15 +1,15 @@
-import React from "react"
-import { RectButtonProps } from "react-native-gesture-handler"
-import { ButtonComponent, Container, Icon, Title } from "./styles"
+import React from 'react';
+import { RectButtonProps } from 'react-native-gesture-handler';
+import { ButtonComponent, Container, Icon } from './styles';
 
 const icons = {
-  M: "man",
-  F: "woman",
-}
+  Masculino: 'man',
+  Feminino: 'woman'
+};
 
 interface Props extends RectButtonProps {
-  type: "M" | "F"
-  isActive: boolean
+  type: 'Masculino' | 'Feminino';
+  isActive: boolean;
 }
 export function GenreButton({ type, isActive, ...rest }: Props) {
   return (
@@ -18,5 +18,5 @@ export function GenreButton({ type, isActive, ...rest }: Props) {
         <Icon name={icons[type]} type={type} />
       </ButtonComponent>
     </Container>
-  )
+  );
 }

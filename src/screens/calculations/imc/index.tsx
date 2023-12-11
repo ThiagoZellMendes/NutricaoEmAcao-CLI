@@ -1,9 +1,9 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 
-import {yupResolver} from '@hookform/resolvers/yup';
+import { yupResolver } from '@hookform/resolvers/yup';
 import firestore from '@react-native-firebase/firestore';
-import {useForm} from 'react-hook-form';
-import {Text} from 'react-native';
+import { useForm } from 'react-hook-form';
+import { Text } from 'react-native';
 import uuid from 'react-native-uuid';
 import * as Yup from 'yup';
 import {
@@ -12,14 +12,14 @@ import {
   GenreButton,
   InputCalculations,
   LoadingModal,
-  ResultCalculationsComponent,
+  ResultCalculationsComponent
 } from '../../../components';
 
-import {useRoute} from '@react-navigation/native';
-import ToastManager, {Toast} from 'toastify-react-native';
-import {PatientProps} from '../../globalProps';
-import {calcularIMC} from './functions';
-import {Sexo} from './props';
+import { useNavigation, useRoute } from '@react-navigation/native';
+import ToastManager, { Toast } from 'toastify-react-native';
+import { PatientProps } from '../../globalProps';
+import { calcularIMC } from './functions';
+import { Sexo } from './props';
 import {
   BackgroundContent,
   ButtonContainer,
@@ -33,7 +33,7 @@ import {
   Containergenre,
   Content,
   PatientName,
-  PatientTitle,
+  PatientTitle
 } from './styles';
 
 type modalProps = {
@@ -42,8 +42,9 @@ type modalProps = {
 };
 
 export function CalculationImc() {
+  const navigation = useNavigation<any>();
   const route = useRoute();
-  const {patient} = route.params as {patient: PatientProps};
+  const { patient } = route.params as { patient: PatientProps };
   const [genre, setGenre] = useState<Sexo>(patient.genre || ('' as any));
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [modalType, setModalType] = useState<modalProps>({} as modalProps);
@@ -53,16 +54,8 @@ export function CalculationImc() {
     weight: '',
     height: '',
     imc: patient.imc,
-    diagnosticImc: patient.diagnosticImc,
+    diagnosticImc: patient.diagnosticImc
   } as PatientProps);
-
-  // const showToasts = () => {
-  //   Toast.success("Calculo Concluido!");
-  // };
-
-  const closeModal = () => {
-    setIsModalVisible(false);
-  };
 
   const schema = Yup.object().shape({
     age: Yup.string()
@@ -72,23 +65,23 @@ export function CalculationImc() {
       .required()
       .matches(/^[0-9]+$/, 'So pode ser usando numeros'),
     weight: Yup.string().required('Digite o peso').min(1),
-    height: Yup.string().required('Digite a altura').min(1),
+    height: Yup.string().required('Digite a altura').min(1)
   });
 
   const {
     control,
     handleSubmit,
-    formState: {errors},
-    reset,
+    formState: { errors },
+    reset
   } = useForm({
     defaultValues: {
       age: patient.age,
       weight: patient.weight,
       height: patient.height,
       imc: patient.imc,
-      diagnosticImc: patient.diagnosticImc,
+      diagnosticImc: patient.diagnosticImc
     } as PatientProps,
-    resolver: yupResolver(schema),
+    resolver: yupResolver(schema)
   });
 
   const handleCalculate = (form: PatientProps) => {
@@ -101,7 +94,7 @@ export function CalculationImc() {
       weight: form.weight,
       height: form.height,
       imc: form.imc,
-      diagnosticImc: form.diagnosticImc,
+      diagnosticImc: form.diagnosticImc
     };
 
     try {
@@ -109,16 +102,16 @@ export function CalculationImc() {
         parseFloat(form.weight || ''),
         parseFloat(form.height || ''),
         parseInt(form.age),
-        genre,
+        genre
       );
-      setFormValues(prevFormValues => ({
+      setFormValues((prevFormValues) => ({
         ...prevFormValues,
         age: form.age,
         genre: genre,
         weight: form.weight,
         height: form.height,
         imc: result.imc,
-        diagnosticImc: result.diagnostico,
+        diagnosticImc: result.diagnostico
       }));
       if (!result) {
         reset();
@@ -141,13 +134,13 @@ export function CalculationImc() {
         weight: formValues.weight,
         height: formValues.height,
         imc: formValues.imc,
-        diagnosticImc: formValues.diagnosticImc,
+        diagnosticImc: formValues.diagnosticImc
       });
-      setModalType({title: 'Paciente salvo com sucesso', type: 'success'});
+      setModalType({ title: 'Paciente salvo com sucesso', type: 'success' });
       setTimeout(() => setLoading(false), 1000);
       setTimeout(() => setIsModalVisible(true), 2000);
     } catch (error) {
-      setModalType({title: 'Erro ao salvar paciente', type: 'error'});
+      setModalType({ title: 'Erro ao salvar paciente', type: 'error' });
       setTimeout(() => setLoading(false), 1000);
       setTimeout(() => setIsModalVisible(true), 2000);
       console.error('Erro:', error);
@@ -158,6 +151,11 @@ export function CalculationImc() {
     setGenre(type);
   }
 
+  const closeModal = () => {
+    setIsModalVisible(false);
+    navigation.navigate('PatientDetails', { patient: { ...patient, ...formValues } });
+  };
+
   function handleClean() {
     setGenre(null),
       setFormValues({
@@ -165,17 +163,18 @@ export function CalculationImc() {
         weight: '',
         height: '',
         imc: '',
-        diagnosticImc: '',
+        diagnosticImc: ''
       } as unknown as PatientProps);
     reset({
       age: '',
       weight: '',
-      height: '',
+      height: ''
     });
     Toast.warn('Cálculos resetados', 'top');
   }
 
   console.log('🔥', formValues);
+
   return (
     <Container>
       <BackgroundContent>
@@ -193,8 +192,9 @@ export function CalculationImc() {
                       fontSize: 20,
                       color: 'gray',
                       alignSelf: 'center',
-                      justifyContent: 'center',
-                    }}>
+                      justifyContent: 'center'
+                    }}
+                  >
                     {`Paciente não possui cálculos`}
                   </Text>
                 )
@@ -207,14 +207,14 @@ export function CalculationImc() {
             </ContainerPatient>
             <Containergenre>
               <GenreButton
-                isActive={genre === 'M'}
-                type="M"
-                onPress={() => handlegenreButton(Sexo.masculino)}
+                isActive={genre === 'Masculino'}
+                type="Masculino"
+                onPress={() => handlegenreButton(Sexo.Masculino)}
               />
               <GenreButton
-                isActive={genre === 'F'}
-                type="F"
-                onPress={() => handlegenreButton(Sexo.feminino)}
+                isActive={genre === 'Feminino'}
+                type="Feminino"
+                onPress={() => handlegenreButton(Sexo.Feminino)}
               />
             </Containergenre>
             <ContainerAge>
@@ -222,7 +222,7 @@ export function CalculationImc() {
                 name="age"
                 type="custom"
                 options={{
-                  mask: '999',
+                  mask: '999'
                 }}
                 TitleCalculate="Idade"
                 isActive={true}
@@ -237,7 +237,7 @@ export function CalculationImc() {
                   name="weight"
                   type="custom"
                   options={{
-                    mask: '999',
+                    mask: '999'
                   }}
                   TitleCalculate="Peso"
                   isActive={true}
@@ -251,7 +251,7 @@ export function CalculationImc() {
                   name="height"
                   type="custom"
                   options={{
-                    mask: '9.99',
+                    mask: '9.99'
                   }}
                   TitleCalculate="Altura"
                   isActive={true}
@@ -264,36 +264,19 @@ export function CalculationImc() {
           </ContainerCalculaters>
           <ButtonContainer>
             <ContainerInputsdoubles>
-              <ButtonComponent
-                title={'Limpar'}
-                type="clean"
-                onPress={() => handleClean()}
-              />
+              <ButtonComponent title={'Limpar'} type="clean" onPress={() => handleClean()} />
             </ContainerInputsdoubles>
             <ContainerInputsdoubles>
-              <ButtonComponent
-                title={'Calcular'}
-                type="default"
-                onPress={handleSubmit(handleCalculate)}
-              />
+              <ButtonComponent title={'Calcular'} type="default" onPress={handleSubmit(handleCalculate)} />
             </ContainerInputsdoubles>
           </ButtonContainer>
           <ButtonContainerSave>
-            <ButtonComponent
-              title={'Salvar cálculos do paciente'}
-              type="save"
-              onPress={handleSavePatient}
-            />
+            <ButtonComponent title={'Salvar cálculos do paciente'} type="save" onPress={handleSavePatient} />
           </ButtonContainerSave>
         </Content>
       </BackgroundContent>
       {loading && <LoadingModal loading={loading} />}
-      <FeedbackModal
-        type={modalType.type}
-        isVisible={isModalVisible}
-        closeModal={closeModal}
-        title={modalType.title}
-      />
+      <FeedbackModal type={modalType.type} isVisible={isModalVisible} closeModal={closeModal} title={modalType.title} />
     </Container>
   );
 }
