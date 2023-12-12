@@ -1,12 +1,11 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { ImagePickerResponse, launchImageLibrary } from 'react-native-image-picker';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import ProfileDefault from '../../assets/profile.png';
+import { AvatarProps } from './props';
 import { AddImageButton, AvatarContainer, AvatarImage, Container } from './styles';
 
-export function AvatarComponent() {
-  const [avatarImage, setAvatarImage] = useState<string | undefined>(undefined);
-
+export function AvatarComponent({ setAvatarImage, avatarImage }: AvatarProps) {
   const handleAddImage = () => {
     const options = {
       mediaType: 'photo' as const,
@@ -20,7 +19,7 @@ export function AvatarComponent() {
       } else if (response.errorMessage) {
         console.log('ImagePicker Error: ', response.errorMessage);
       } else if (response.assets && response.assets.length > 0) {
-        setAvatarImage(response.assets[0].uri);
+        setAvatarImage(response.assets[0].uri || '');
       }
     });
   };
