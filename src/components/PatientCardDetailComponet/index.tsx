@@ -13,12 +13,20 @@
 //   );
 // }
 
-import React, { useState } from 'react';
+import { masks } from '@utils';
+import React, { useCallback, useEffect, useState } from 'react';
 import { View } from 'react-native';
 import { PatientDetailsProps } from './props';
 import { Container, ContainerIconRight, Icon, IconRight, TextCard, TextInputEditing, TitleCard } from './styles'; // Importe os ícones necessários
 
-export function PatientCardDetailComponent({ iconName, iconSize, titleCard, textCard }: PatientDetailsProps) {
+const MAX_CPF_LENGTH = 14;
+
+function formatCPFOnChange(value: string, setEditedTitle: (value: string) => void) {
+  const formattedCPF = masks.cpf(value).value.slice(0, MAX_CPF_LENGTH);
+  setEditedTitle(formattedCPF);
+}
+
+export function PatientCardDetailComponent({ iconName, iconSize, titleCard, textCard, updateData }: PatientDetailsProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [editedTitle, setEditedTitle] = useState(textCard);
 
@@ -31,20 +39,30 @@ export function PatientCardDetailComponent({ iconName, iconSize, titleCard, text
   };
 
   const handleTitleChange = (newTitle: string) => {
-    setEditedTitle(newTitle);
+    if (titleCard === 'Cpf:') {
+      formatCPFOnChange(newTitle, setEditedTitle);
+    } else {
+      setEditedTitle(newTitle);
+    }
   };
 
-  const handleConfirmEdit = () => {
+  const handleConfirmEdit = useCallback(() => {
     setEditedTitle(editedTitle);
     setIsEditing(false);
-  };
+    updateData(editedTitle);
+  }, [editedTitle, updateData]);
 
   const handleBlur = () => {
     if (isEditing) {
       handleConfirmEdit();
       setIsEditing(false);
     }
+    updateData(editedTitle);
   };
+
+  useEffect(() => {
+    setEditedTitle(textCard);
+  }, [textCard]);
 
   return (
     <Container>
