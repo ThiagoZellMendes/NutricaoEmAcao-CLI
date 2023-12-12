@@ -46,7 +46,6 @@ export const ButtonContainer = styled.View`
 
 export const ContainerInputsdoubles = styled.View`
   width: 50%;
-  /* margin-right: 5px; */
 `;
 
 export const ButtonContainerSave = styled.View`

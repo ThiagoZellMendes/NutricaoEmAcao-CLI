@@ -1,7 +1,6 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import {
-  CalculateList,
   CalculationImc,
   CalculationPgc,
   ListPatients,
@@ -17,7 +16,7 @@ const { Screen, Navigator } = createNativeStackNavigator();
 export function RoutersApp() {
   return (
     <NavigationContainer>
-      <Navigator initialRouteName="ListPatients">
+      <Navigator initialRouteName="SighIn">
         <Screen
           name="SignIn"
           component={SignIn}
@@ -43,17 +42,6 @@ export function RoutersApp() {
             headerBackTitleVisible: false,
             headerTintColor: '#65717B',
             headerTitle: 'Registro Paciente',
-            headerTransparent: true,
-            headerStyle: { backgroundColor: '#FFFFFF' }
-          }}
-        />
-        <Screen
-          name="CalculateList"
-          component={CalculateList}
-          options={{
-            headerBackTitleVisible: false,
-            headerTintColor: '#65717B',
-            headerTitle: ' ',
             headerTransparent: true,
             headerStyle: { backgroundColor: '#FFFFFF' }
           }}

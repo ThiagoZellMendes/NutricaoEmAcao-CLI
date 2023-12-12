@@ -1,4 +1,3 @@
-export * from './calculateList';
 export * from './calculations/imc';
 export * from './calculations/pgc';
 export * from './listPatients';
