@@ -1,35 +1,25 @@
-import { TextInput } from "react-native";
+import { TextInput } from 'react-native';
 
 export interface PatientProps {
-  fullName: string
-  cpf: string
-  age: string
+  fullName: string;
+  cpf: string;
+  age: string;
 }
 
 export type InputProps = {
   id: number;
-  forwardedRef: React.RefObject<TextInput>;
+  forwardedRef?: React.RefObject<TextInput>;
   title: string;
   name: string;
   autoCapitalize: 'none' | 'sentences' | 'words' | 'characters' | undefined;
-  type:
-    | 'credit-card'
-    | 'cpf'
-    | 'cnpj'
-    | 'zip-code'
-    | 'only-numbers'
-    | 'money'
-    | 'cel-phone'
-    | 'datetime'
-    | 'custom';
+  type: 'credit-card' | 'cpf' | 'cnpj' | 'zip-code' | 'only-numbers' | 'money' | 'cel-phone' | 'datetime' | 'custom';
   options?: object;
   autoCorrect: boolean;
   keyboardType: string;
   placeholder: string;
   onChangeText?: (item: string) => void;
   typePassword?: boolean;
-  returnKeyType: 'next' | 'done'
+  returnKeyType: 'next' | 'done';
 };
 
 export type valueName = 'fullName' | 'cpf' | 'age';
-

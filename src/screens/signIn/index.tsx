@@ -112,9 +112,9 @@ export function SignIn() {
           <ContainerLink onPress={() => navigate('RegisterNutritionists')}>
             <TextLink>Efetuar Cadastro de Nutricionista</TextLink>
           </ContainerLink>
-          {/* <ContainerLink onPress={() => console.log("Press 2")}>
+          <ContainerLink onPress={() => navigate('RecoveryPassword')}>
             <TextLink>Esqueceu a senha?</TextLink>
-          </ContainerLink> */}
+          </ContainerLink>
         </Content>
       </BackgroundContent>
       {loading && <LoadingModal loading={loading} />}

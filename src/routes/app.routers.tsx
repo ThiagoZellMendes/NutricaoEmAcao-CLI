@@ -5,6 +5,7 @@ import {
   CalculationPgc,
   ListPatients,
   PatientDetails,
+  RecoveryPassword,
   RegisterNutritionists,
   RegisterPatients,
   SignIn
@@ -82,6 +83,17 @@ export function RoutersApp() {
             headerBackTitleVisible: false,
             headerTintColor: '#65717B',
             headerTitle: 'Detalhes do Paciente',
+            headerTransparent: true,
+            headerStyle: { backgroundColor: '#FFFFFF' }
+          }}
+        />
+        <Screen
+          name="RecoveryPassword"
+          component={RecoveryPassword}
+          options={{
+            headerBackTitleVisible: false,
+            headerTintColor: '#65717B',
+            headerTitle: 'Recuperar Senha',
             headerTransparent: true,
             headerStyle: { backgroundColor: '#FFFFFF' }
           }}

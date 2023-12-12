@@ -2,7 +2,6 @@ import * as Yup from 'yup';
 import { validateNationalRegistry } from '../../../utils/ValidateCPF-CNPJ';
 import { InputProps } from './props';
 
-
 export const INPUTS = () =>
   [
     {
@@ -16,7 +15,7 @@ export const INPUTS = () =>
       typePassword: false,
       returnKeyType: 'next',
       placeholder: 'Cpf do paciente',
-      onChangeText: (value: string) => value,
+      onChangeText: (value: string) => value
     },
     {
       id: 2,
@@ -24,7 +23,7 @@ export const INPUTS = () =>
       name: 'fullName',
       type: 'custom',
       options: {
-        mask: '*******************************************************',
+        mask: '*******************************************************'
       },
       autoCapitalize: 'sentences',
       autoCorrect: false,
@@ -32,7 +31,7 @@ export const INPUTS = () =>
       keyboardType: 'default',
       returnKeyType: 'next',
       placeholder: 'Nome completo do paciente',
-      onChangeText: (value: string) => value,
+      onChangeText: (value: string) => value
     },
     {
       id: 3,
@@ -40,7 +39,7 @@ export const INPUTS = () =>
       name: 'age',
       type: 'custom',
       options: {
-        mask: '999',
+        mask: '999'
       },
       autoCapitalize: 'none',
       autoCorrect: false,
@@ -48,23 +47,16 @@ export const INPUTS = () =>
       returnKeyType: 'done',
       keyboardType: 'number-pad',
       placeholder: 'Idade do paciente',
-      onChangeText: (value: string) => value,
+      onChangeText: (value: string) => value
     }
   ] as InputProps[];
- 
- 
- export const textInputShapeYup = () =>
- Yup.object().shape({
-  fullName: Yup.string().required('digite seu sobrenome').trim(),
-  cpf: Yup.string()
-    .required('digite seu CPF')
-    .trim()
-    .test(
-      'cpf',
-      'cpf Invalido',
-      value => !!value && validateNationalRegistry(value),
-    ),
-  age: Yup.string()
-    .required('digite seu email')
-    .trim(),
-  })
+
+export const textInputShapeYup = () =>
+  Yup.object().shape({
+    fullName: Yup.string().required('digite seu sobrenome').trim(),
+    cpf: Yup.string()
+      .required('digite seu CPF')
+      .trim()
+      .test('cpf', 'cpf Invalido', (value) => !!value && validateNationalRegistry(value)),
+    age: Yup.string().required('digite seu email').trim()
+  });
