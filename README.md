@@ -1,3 +1,5 @@
+
+https://github.com/ThiagoZellMendes/NutricaoEmAcao-CLI/assets/64324862/3fa2ef70-bc62-4229-a841-437c5a64189c
 ![Badge Finalizado](http://img.shields.io/static/v1?label=STATUS&message=FINALIZADO&color=GREEN&style=for-the-badge)
 
 
@@ -48,13 +50,15 @@ Proporcionar uma visão abrangente e detalhada do progresso nutricional ao longo
 
 ## 🎨 Layout
 
+[![Watch the video](https://img.youtube.com/vi/T-D1KVIuvjA/maxresdefault.jpg)](https://github.com/ThiagoZellMendes/NutricaoEmAcao-CLI/assets/64324862/270ed49e-9e42-4e47-8205-7e6056d5732d)
+
 <p align="center"> 
 <img alt="Repository size" src="https://github.com/ThiagoZellMendes/NutricaoEmAcao-CLI/assets/64324862/f048f82c-da04-46be-8f70-8d46921c3a5f" width="300px">
 <img alt="Repository size" src="https://github.com/ThiagoZellMendes/NutricaoEmAcao-CLI/assets/64324862/ec55e323-0c58-4ab7-bc4c-ac53479d78c2" width="300px">
 <img alt="Repository size" src="https://github.com/ThiagoZellMendes/NutricaoEmAcao-CLI/assets/64324862/712632b7-ebf9-4004-8711-6986439a5178" width="300px">
 <img alt="Repository size" src="https://github.com/ThiagoZellMendes/NutricaoEmAcao-CLI/assets/64324862/327e91d7-830a-4f7d-8379-125995b1d67a" width="300px">
-<img alt="Repository size" src="https://github.com/ThiagoZellMendes/NutricaoEmAcao-CLI/assets/64324862/7905e396-4a27-45ca-b980-4815f6712ed0" width="300px">
-<img alt="Repository size" src="https://github.com/ThiagoZellMendes/NutricaoEmAcao-CLI/assets/64324862/160920e7-253b-41a3-b17d-8f053ce7e457" width="300px">
+</p>
+
 
 ## 🛠 Tecnologias
 
