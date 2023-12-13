@@ -49,7 +49,7 @@ Proporcionar uma visão abrangente e detalhada do progresso nutricional ao longo
 
 ## 🎨 Layout
 
-[![Watch the video](https://img.youtube.com/vi/T-D1KVIuvjA/maxresdefault.jpg)](https://github.com/ThiagoZellMendes/NutricaoEmAcao-CLI/assets/64324862/270ed49e-9e42-4e47-8205-7e6056d5732d)
+[![Watch the video](https://github.com/ThiagoZellMendes/NutricaoEmAcao-CLI/assets/64324862/270ed49e-9e42-4e47-8205-7e6056d5732d)
 
 <p align="center"> 
 <img alt="Repository size" src="https://github.com/ThiagoZellMendes/NutricaoEmAcao-CLI/assets/64324862/f048f82c-da04-46be-8f70-8d46921c3a5f" width="300px">
