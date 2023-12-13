@@ -14,7 +14,7 @@ export function calcularIMC(peso: number, altura: number, idade: number, sexo: S
         diagnostico = 'Magreza moderada';
       } else if (imc >= 18.4 && imc < 24.9) {
         diagnostico = 'Peso normal';
-      } else if (imc >= 24.9 && imc < 25.9) {
+      } else if (imc >= 24.9 && imc < 29.9) {
         diagnostico = 'Acima do peso';
       } else if (imc >= 29.9 && imc < 34.9) {
         diagnostico = 'Obesidade Grau I';
