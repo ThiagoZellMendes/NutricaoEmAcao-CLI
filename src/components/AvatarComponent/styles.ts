@@ -4,7 +4,6 @@ import styled from 'styled-components/native';
 export const Container = styled.View`
   width: 150px;
   height: 150px;
-  /* background-color: red; */
 `;
 export const AvatarContainer = styled.View`
   width: 150px;
@@ -12,6 +11,7 @@ export const AvatarContainer = styled.View`
   border-radius: 75px;
   border: 3px;
   overflow: hidden;
+  border-color: green;
 `;
 
 export const AvatarImage = styled(Image)`
