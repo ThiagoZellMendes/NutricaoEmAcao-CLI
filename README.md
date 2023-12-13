@@ -1,5 +1,4 @@
 
-https://github.com/ThiagoZellMendes/NutricaoEmAcao-CLI/assets/64324862/3fa2ef70-bc62-4229-a841-437c5a64189c
 ![Badge Finalizado](http://img.shields.io/static/v1?label=STATUS&message=FINALIZADO&color=GREEN&style=for-the-badge)
 
 
